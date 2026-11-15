@@ -1,0 +1,96 @@
+---
+import { mcpServers, mcpSources } from '../lib/mcp';
+import { site } from '../site.config.mjs';
+import Base from '../layouts/Base.astro';
+import { sources, images, texts, videos, skills, communitySkills } from '../lib/data';
+import { ui, type Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = ui[lang];
+const c = t.credits;
+const count = (key: string) => images.filter((p) => p.source === key).length;
+const rows: [string, string][] = [
+  ['jau123', c.usedImages(count('jau123'))],
+  ['youmind', c.usedImages(count('youmind'))],
+  ['zerolu', c.usedImages(count('zerolu'))],
+  ['freestylefly', c.usedImages(count('freestylefly'))],
+  ['evolink', c.usedImages(count('evolink'))],
+  ['youmindgptimage2', c.usedImages(count('youmindgptimage2'))],
+  ['youmindgptimage15', c.usedImages(count('youmindgptimage15'))],
+  ['youmindseedream', c.usedImages(count('youmindseedream'))],
+  ['devanshug', c.usedImages(count('devanshug'))],
+  ['learnprompt', c.usedVideos(videos.filter((v) => v.source === 'learnprompt').length)],
+  ['youmindseedance', c.usedVideos(videos.filter((v) => v.source === 'youmindseedance').length)],
+  ['oswseedance', c.usedVideos(videos.filter((v) => v.source === 'oswseedance').length)],
+  ['youmindgrok', c.usedVideos(videos.filter((v) => v.source === 'youmindgrok').length)],
+  ...['evolinkh3', 'atlasomni'].map(
+    (k) => [k, c.usedVideos(videos.filter((v) => v.source === k).length)] as [string, string],
+  ),
+  ...['promptschat', 'mustvlad', 'voltagent', 'wshobson', 'geminisubagents', 'youmindgemini', 'fabric', 'llmpromptlibrary'].map(
+    (k) => [k, c.usedText(texts.filter((x) => x.source === k).length)] as [string, string],
+  ),
+  ['anthropic', c.usedSkills(skills.length)],
+];
+---
+
+<Base lang={lang} title={c.title} description={c.metaDesc} crumbs={[[c.title, '/credits']]}>
+  <div class="wrap max-w-4xl pt-10">
+    <p class="label">{t.about}</p>
+    <h1 class="display mt-2 text-4xl sm:text-6xl">{c.title}</h1>
+    <p class="mt-5 max-w-2xl text-lg leading-relaxed text-muted">{c.lead}</p>
+
+    <div class="mt-8 overflow-x-auto">
+      <table class="w-full border-t border-ink text-left text-sm">
+        <thead>
+          <tr class="border-b border-ink">
+            <th class="label py-2.5 pr-4 font-medium">{c.thCollection}</th>
+            <th class="label py-2.5 pr-4 font-medium">{c.thBy}</th>
+            <th class="label py-2.5 pr-4 font-medium">{c.thLicense}</th>
+            <th class="label py-2.5 font-medium">{c.thUsed}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            rows.map(([key, used]) => {
+              const s = sources[key];
+              return (
+                <tr class="border-b border-line">
+                  <td class="py-3 pr-4"><a href={s.url} target="_blank" rel="noopener noreferrer" class="link font-semibold">{s.name}</a></td>
+                  <td class="py-3 pr-4">{s.by}</td>
+                  <td class="py-3 pr-4">
+                    <a href={s.licenseUrl} target="_blank" rel="noopener noreferrer" class="link">{key === 'anthropic' ? c.perSkill : s.license}</a>
+                  </td>
+                  <td class="py-3 font-mono text-xs text-muted">{used}</td>
+                </tr>
+              );
+            })
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <p class="mt-4 max-w-2xl text-sm text-muted">{c.communityNote(communitySkills.length)}</p>
+
+    <section class="directory-source" id="mcp-source"><h2>MCP server directory</h2><p>{mcpServers.length.toLocaleString('en-US')} listings are adapted from the collections below. Descriptions are normalized to plain text; repeated project URLs or remote endpoints are combined across categories.</p>{mcpSources.map(source=><p><a class="link" href={source.repository}>{source.name}</a> by {source.author}. Snapshot <a class="link" href={source.snapshotUrl}>{source.revision.slice(0,8)}</a>, imported {source.importedAt.slice(0,10)}. <a class="link" href={source.localLicenseUrl}>Collection MIT notice</a>.</p>)}<p>Collection licensing does not establish server software licenses, pricing, security or reliability.</p></section>
+
+    <div class="sec mt-14">
+      <span class="label">01</span>
+      <h2>{c.imagesTitle}</h2>
+    </div>
+    <p class="mt-3 max-w-2xl leading-relaxed text-muted">{c.imagesBody}</p>
+
+
+    <div id="removal" class="sec mt-12 scroll-mt-24">
+      <span class="label">02</span>
+      <h2>{c.takedownTitle}</h2>
+    </div>
+    <p class="mt-3 max-w-2xl leading-relaxed text-muted">
+      {c.takedownA}
+      <a href={`${site.repository}/issues/new?template=content-removal.yml`} class="link font-semibold text-ink">Request content removal</a>
+      {c.takedownB}
+    </p>
+  </div>
+</Base>

@@ -1,0 +1,112 @@
+---
+import { mcpServers } from '../lib/mcp';
+import Base from '../layouts/Base.astro';
+import BabaSymbol from '../components/BabaSymbol.astro';
+import CategoryIcon from '../components/CategoryIcon.astro';
+import { inspirationPicks } from '../lib/inspiration.mjs';
+import ImageCard from '../components/ImageCard.astro';
+import VideoCard from '../components/VideoCard.astro';
+import { images, texts, videos, skills, communitySkills, catSlugs, catCounts, excerpt, fmt } from '../lib/data';
+import { ui, categoryLabels, type Lang } from '../i18n';
+import { faqSchema } from '../lib/seo';
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const t = ui[lang];
+const popular = [...images].sort((a, b) => b.likes - a.likes);
+// Keep a small, diverse pool in the page; shuffle works without a network request.
+const imagePool = inspirationPicks(popular.filter(p => p.images[0] && p.prompt.trim()), 40, p => p.cats[0]);
+const videoPool = inspirationPicks([...videos].filter(v => v.video && v.prompt.trim()).sort((a,b) => b.likes - a.likes), 32, v => v.model);
+const textPool = inspirationPicks(texts.filter(x => x.prompt.trim()), 36, x => x.type);
+const imagePicks = imagePool.slice(0, 8);
+const videoPicks = videoPool.slice(0, 4);
+const textPicks = textPool.slice(0, 6);
+const stats = [[images.length, 'Image prompts', '/images'], [videos.length, 'Video prompts', '/videos'], [texts.length, 'Text prompts', '/text'], [skills.length + communitySkills.length, 'Skill & repo listings', '/skills'], [mcpServers.length, 'MCP listings', '/mcp-servers']] as const;
+---
+<Base lang={lang} title={t.homeTitle} schema={[faqSchema(t.faq.items)]}>
+  <section class="home-hero wrap">
+    <div class="hero-copy">
+      <p class="free-badge"><span aria-hidden="true">✦</span> Free to browse. No account needed.</p>
+      <h1>Stop guessing.<br />{' '}Ask the Baba.</h1>
+      <p class="hero-description">Ready-to-copy AI prompts, agent skills, and MCP servers for people who make things.</p>
+      <p class="mt-4 max-w-lg text-base leading-relaxed text-muted">{fmt(images.length + videos.length + texts.length)} prompts from open-source collections. Find your starting point, fill in the blanks, and get to work.</p>
+      <form action="/search" class="hero-search" role="search">
+        <label for="hero-query" class="sr-only">Search prompts</label>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/></svg>
+        <input id="hero-query" name="q" type="search" placeholder="Try product photography or code review" />
+        <button type="submit">Find a prompt</button>
+      </form>
+      <div class="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-muted"><span>Start with:</span><a class="link" href="/category/product-brand">Product shots</a><a class="link" href="/category/poster">Posters</a><a class="link" href="/text-type/agent">Agent prompts</a></div>
+    </div>
+    <div class="baba-studio" aria-label="Baba helps you find a starting point">
+      <div class="baba-orbit" aria-hidden="true"></div>
+      <div class="baba-greeting">A little direction.<br /><strong>A lot of possibilities.</strong></div>
+      <BabaSymbol class="hero-baba" />
+      <a class="baba-note note-image" href="/images"><CategoryIcon category="photography" /><span>Make an image<small>Start with a prompt</small></span><span aria-hidden="true">↗</span></a>
+      <a class="baba-note note-text" href="/text"><CategoryIcon category="poster" /><span>Find the words<small>Skip the blank page</small></span><span aria-hidden="true">↗</span></a>
+      <a class="baba-note note-agent" href="/skills"><span class="note-code" aria-hidden="true">{'{ }'}</span><span>Build with agents<small>Give them a head start</small></span><span aria-hidden="true">↗</span></a>
+      <p class="baba-caption">Bring an idea. Baba brings a starting point.</p>
+    </div>
+  </section>
+  <div class="wrap">
+    <dl class="library-stats">{stats.map(([n, label, path]) => <div><a href={path}><dt>{label}</dt><dd>{fmt(n)}</dd></a></div>)}</dl>
+    <div class="attribution-strip"><span class="text-mark" aria-hidden="true">✦</span><p>Shared by creators. Collected with care. <a href="/credits" class="link">Sources and licenses included.</a></p></div>
+  </div>
+  <section class="wrap pt-16">
+    <div class="section-heading"><div><h2>What are you making?</h2><p>Pick a direction. Borrow a good starting point.</p></div><a class="link text-sm" href="/images">Browse image prompts</a></div>
+    <div class="category-grid">{catSlugs.map((slug) => <a href={`/category/${slug}`}><CategoryIcon category={slug} /><span class="category-name">{categoryLabels[lang][slug]}</span><span class="text-sm text-muted">{fmt(catCounts[slug])}</span></a>)}</div>
+  </section>
+  <section class="wrap pt-16">
+    <div class="section-heading"><div><h2>A little inspiration</h2><p>A mix of categories, starting with well-liked examples.</p></div><div class="section-actions"><button hidden type="button" class="shuffle-picks link text-sm" data-picks="image-picks" data-count="8"><span aria-hidden="true">↻</span> Shuffle picks<span class="sr-only">: image prompts</span></button><a class="link text-sm" href="/images">All image prompts</a><span class="shuffle-status sr-only" role="status"></span></div></div>
+    <div id="image-picks" class="masonry mt-7">{imagePicks.map((p) => <ImageCard p={p} lang={lang} />)}</div>
+    <template id="image-picks-pool">{imagePool.map((p) => <div data-group={p.cats[0]}><ImageCard p={p} lang={lang} /></div>)}</template>
+  </section>
+  <section class="wrap pt-16">
+    <div class="section-heading"><div><h2>Put things in motion</h2><p>Different models, real sample clips, and the prompts behind them.</p></div><div class="section-actions"><button hidden type="button" class="shuffle-picks link text-sm" data-picks="video-picks" data-count="4"><span aria-hidden="true">↻</span> Shuffle picks<span class="sr-only">: video prompts</span></button><a class="link text-sm" href="/videos">All video prompts</a><span class="shuffle-status sr-only" role="status"></span></div></div>
+    <div id="video-picks" class="mt-7 grid grid-cols-2 gap-x-5 gap-y-7 md:grid-cols-4">{videoPicks.map((v) => <VideoCard v={v} lang={lang} />)}</div>
+    <template id="video-picks-pool">{videoPool.map((v) => <div data-group={v.model}><VideoCard v={v} lang={lang} /></div>)}</template>
+  </section>
+  <section class="wrap pt-16">
+    <div class="section-heading"><div><h2>Words that do some work</h2><p>A mix of writing, structured prompts, images, and agent instructions.</p></div><div class="section-actions"><button hidden type="button" class="shuffle-picks link text-sm" data-picks="text-picks" data-count="6"><span aria-hidden="true">↻</span> Shuffle picks<span class="sr-only">: text prompts</span></button><a class="link text-sm" href="/text">All text prompts</a><span class="shuffle-status sr-only" role="status"></span></div></div>
+    <div id="text-picks" class="mt-5 grid gap-x-8 md:grid-cols-2">{textPicks.map((x) => <a href={`/text-prompt/${x.slug}`} class="row text-pick"><span class="text-pick-number" aria-hidden="true"></span><span class="font-semibold">{x.title}</span><span class="mt-2 line-clamp-2 block text-sm leading-relaxed text-muted">{x.desc || excerpt(x.prompt, 150)}</span><span class="mt-2 block text-xs text-muted">{x.model}</span></a>)}</div>
+    <template id="text-picks-pool">{textPool.map((x) => <div data-group={x.type}><a href={`/text-prompt/${x.slug}`} class="row text-pick"><span class="text-pick-number" aria-hidden="true"></span><span class="font-semibold">{x.title}</span><span class="mt-2 line-clamp-2 block text-sm leading-relaxed text-muted">{x.desc || excerpt(x.prompt, 150)}</span><span class="mt-2 block text-xs text-muted">{x.model}</span></a></div>)}</template>
+  </section>
+  <section class="wrap pt-16">
+    <div class="agent-callout"><div><p class="text-sm font-semibold text-mark">For the builders</p><h2>Give your agent a head start.</h2><p>Find an MCP project for your tools, explore agent skills, or connect your assistant directly to our prompt library.</p><div class="mt-6 flex flex-wrap gap-3"><a class="btn" href="/mcp-servers">Explore MCP servers</a><a class="btn-line" href="/skills">Agent skills</a><a class="btn-line" href="/mcp">Connect your assistant</a></div></div><div class="agent-drawing" role="img" aria-label="Your assistant connects through PromptsBaba to prompts, skills, and MCP tools.">
+      <svg class="agent-wires" viewBox="0 0 400 300" fill="none" aria-hidden="true"><path d="M65 65H140Q200 65 200 150M335 65H260Q200 65 200 150M65 235H140Q200 235 200 150M335 235H260Q200 235 200 150" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 6"/><circle cx="200" cy="150" r="63" stroke="currentColor" stroke-opacity=".25"/></svg>
+      <span class="agent-node node-prompts">✦<small>Prompts</small></span><span class="agent-node node-skills">{'{ }'}<small>Skills</small></span>
+      <BabaSymbol class="agent-baba" />
+      <span class="agent-node node-assistant">⌘<small>Your assistant</small></span><span class="agent-node node-tools">↗<small>MCP tools</small></span>
+      <span class="agent-drawing-caption">Good tools. All connected.</span>
+    </div></div>
+  </section>
+  <section class="wrap pt-16">
+    <div class="section-heading"><div><h2>A few good questions</h2></div></div>
+    <div class="mt-5 max-w-3xl">{t.faq.items.map(([q,a]) => <details class="faq-item"><summary>{q}<span aria-hidden="true">+</span></summary><p>{a}</p></details>)}</div>
+  </section>
+  <section class="wrap pt-16" aria-labelledby="support-title">
+    <div class="support-callout">
+      <div class="support-copy"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 11h17v10a7 7 0 0 1-7 7h-3a7 7 0 0 1-7-7ZM23 12h2a5 5 0 0 1 0 10h-2M4 29h23M11 3v3M17 2v4"/></svg><div><h2 id="support-title">Found a good starting point?</h2><p>A little support helps keep the library free for everyone.</p></div></div>
+      <div class="support-action"><button type="button" class="btn" disabled aria-describedby="support-status">Buy Baba a coffee</button><span id="support-status">Support link coming soon.</span></div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  import { inspirationPicks } from '../lib/inspiration.mjs';
+  document.querySelectorAll<HTMLButtonElement>('.shuffle-picks').forEach(button => {
+    const target = document.getElementById(button.dataset.picks!);
+    const template = document.getElementById(`${button.dataset.picks}-pool`) as HTMLTemplateElement;
+    if (!target || !template) return;
+    button.hidden = false;
+    button.addEventListener('click', () => {
+      const current = new Set(Array.from(target.querySelectorAll('a')).map(a => a.getAttribute('href')));
+      const pool = Array.from(template.content.children);
+      const unseen = pool.filter(item => !current.has(item.querySelector('a')?.getAttribute('href')));
+      const count = Number(button.dataset.count);
+      const picks = inspirationPicks(unseen.length >= count ? unseen : pool, count, item => item.getAttribute('data-group'), Math.random);
+      target.replaceChildren(...picks.map(item => item.firstElementChild!.cloneNode(true)));
+      const status = button.closest('.section-actions')?.querySelector('.shuffle-status');
+      if (status) status.textContent = `Showing ${picks.length} different prompts.`;
+    });
+  });
+</script>

@@ -1,0 +1,6 @@
+---
+import Directory from '../../../../views/McpDirectory.astro';
+import { mcpServers, mcpCategories, MCP_PAGE_SIZE } from '../../../../lib/mcp';
+export const getStaticPaths = ({ paginate }) => mcpCategories.flatMap(c=>paginate(mcpServers.filter(s=>s.categories.includes(c.slug)),{params:{category:c.slug},pageSize:MCP_PAGE_SIZE}));
+---
+<Directory page={Astro.props.page} category={Astro.params.category} />

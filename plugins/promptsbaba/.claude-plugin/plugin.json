@@ -1,0 +1,10 @@
+{
+  "name": "promptsbaba",
+  "version": "1.0.0",
+  "description": "Search 7,000+ free image, video and text prompts on promptsbaba.com and fill them in for your task.",
+  "author": { "name": "heysamai", "url": "https://github.com/heysamai" },
+  "homepage": "https://promptsbaba.com/mcp",
+  "repository": "https://github.com/heysamai/promptsbaba",
+  "license": "MIT",
+  "keywords": ["prompts", "image", "video", "nano-banana", "gpt-image", "seedance", "mcp"]
+}

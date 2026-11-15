@@ -1,0 +1,41 @@
+{
+  "name": "promptsbaba",
+  "version": "0.1.0",
+  "description": "Free library of ready-to-copy AI prompts (image, video, text) and agent skills",
+  "homepage": "https://promptsbaba.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/heysamai/promptsbaba.git"
+  },
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "import": "node scripts/import.mjs",
+    "import:fresh": "node scripts/import.mjs --fetch",
+    "brand": "node scripts/og.mjs",
+    "test": "node --test \"tests/**/*.test.mjs\"",
+    "stats:mcp": "node scripts/mcp-stats.mjs",
+    "import:mcp": "node scripts/import-mcp.mjs",
+    "import:mcp:fresh": "node scripts/import-mcp.mjs --fetch"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/server": "^2.4.0",
+    "@tailwindcss/vite": "^4.3.5",
+    "@vercel/functions": "^3.11.1",
+    "astro": "^7.4.8",
+    "mcp-handler": "^2.3.1",
+    "tailwindcss": "^4.3.5",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "qrcode": "^1.5.4",
+    "sharp": "^0.35.5"
+  },
+  "license": "MIT"
+}

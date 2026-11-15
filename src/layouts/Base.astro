@@ -1,0 +1,194 @@
+---
+import '../styles/global.css';
+import { site } from '../site.config.mjs';
+import Logo from '../components/Logo.astro';
+import { ui, href, barePath, type Lang } from '../i18n';
+import { SITE, url } from '../lib/seo';
+
+interface Props {
+  lang: Lang;
+  title: string;
+  description?: string;
+  image?: string;
+  noindex?: boolean;
+  /** Breadcrumb trail after "Home": [label, root-relative path] pairs. */
+  crumbs?: [string, string][];
+  /** Extra schema.org objects for this page. */
+  schema?: Record<string, unknown>[];
+}
+const { lang, title, noindex = false, crumbs = [], schema = [] } = Astro.props;
+const image = Astro.props.image ?? new URL('/og.png', Astro.site).href;
+const t = ui[lang];
+const REPO_SLUG = site.repositorySlug;
+const REPO = site.repository;
+// Long titles drop the site suffix so the page's own words fit in a search result.
+const fullTitle = title.includes(site.name) || title.length > 48 ? title : `${title} · ${site.name}`;
+// No trailing slash: the host redirects /images/ to /images, and the canonical must name the final URL.
+const bare = barePath(Astro.url.pathname).replace(/(.)\/+$/, '$1');
+// Paginated list pages (/images/2, /category/x/3) get their page number in the description,
+// so no two pages share one.
+const pageNo = bare.match(/\/(\d+)$/)?.[1];
+const description = (Astro.props.description ?? t.siteDesc) + (pageNo ? ` Page ${pageNo}.` : '');
+const abs = (l: Lang) => new URL(href(l, bare), Astro.site);
+const nav = [
+  ['/images', t.nav.images],
+  ['/videos', t.nav.videos],
+  ['/text', t.nav.text],
+  ['/skills', t.nav.skills],
+  ['/mcp-servers', 'MCP servers'],
+  ['/credits', t.nav.credits],
+  ['/mcp', 'Connect your agent'],
+];
+const graphs: Record<string, unknown>[] = [...schema];
+if (bare === '/') {
+  graphs.push(
+    {
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      name: site.name,
+      url: url(lang, '/'),
+      inLanguage: lang,
+      description,
+      publisher: { '@id': `${SITE}/#org` },
+      potentialAction: {
+        '@type': 'SearchAction',
+        target: `${url(lang, '/search')}?q={search_term_string}`,
+        'query-input': 'required name=search_term_string',
+      },
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      '@id': `${SITE}/#org`,
+      name: site.name,
+      url: SITE,
+      logo: `${SITE}/icon-512.png`,
+      description: ui.en.siteDesc,
+      sameAs: [REPO],
+    },
+  );
+}
+if (crumbs.length) {
+  graphs.push({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [[site.name, '/'], ...crumbs].map(([name, path], i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name,
+      item: url(lang, path),
+    })),
+  });
+}
+const ld = graphs.map((g) => JSON.stringify(g).replace(/</g, '\\u003c'));
+const isOn = (p: string) =>
+  (p === '/mcp' ? bare === p : bare.startsWith(p)) ||
+  (p === '/images' && /^\/(category|prompt)\//.test(bare)) ||
+  (p === '/videos' && bare.startsWith('/video/')) ||
+  (p === '/text' && bare.startsWith('/text-prompt'));
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <script is:inline>
+      (() => {
+        let theme = 'dark';
+        try { const saved = localStorage.getItem('promptsbaba-theme'); if (saved === 'light' || saved === 'dark') theme = saved; } catch {}
+        document.documentElement.dataset.theme = theme;
+      })();
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={abs(lang)} />}
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={abs(lang)} />
+    <meta property="og:image" content={image} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={image} />
+    <meta name="theme-color" content="#0B0F17" />
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="/favicon-16.png" sizes="16x16" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="sitemap" href="/sitemap.xml" />
+    <link rel="help" type="text/plain" href="/llms.txt" title="llms.txt" />
+    {!noindex && ld.map((json) => <script type="application/ld+json" set:html={json} />)}
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  </head>
+  <body class="flex min-h-screen flex-col">
+    <a href="#main" class="skip-link">Skip to content</a>
+    <header class="site-header">
+      <div class="wrap flex min-h-20 flex-wrap items-center gap-x-8 gap-y-3 py-4">
+        <a href="/" aria-label="PromptsBaba home"><Logo /></a>
+        <nav class="desktop-nav hidden items-center gap-6 xl:flex" aria-label="Main">
+          <details class="prompt-menu">
+            <summary class:list={['nav-link', /^\/(images|videos|text|prompt|video|category)/.test(bare) && 'nav-active']}>Prompts <span aria-hidden="true">⌄</span></summary>
+            <div class="prompt-menu-items">
+              <a href="/images">Image prompts</a><a href="/videos">Video prompts</a><a href="/text">Text prompts</a>
+            </div>
+          </details>
+          <a class:list={['nav-link', isOn('/mcp-servers') && 'nav-active']} href="/mcp-servers">MCP servers</a>
+          <a class:list={['nav-link', isOn('/skills') && 'nav-active']} href="/skills">Agent skills</a>
+          <a class:list={['nav-link', bare === '/mcp' && 'nav-active']} href="/mcp">Connect your agent</a>
+          <a class:list={['nav-link', isOn('/credits') && 'nav-active']} href="/credits">Credits</a>
+        </nav>
+        <div class="ml-auto flex items-center gap-2">
+          <a href="/search" class="search-shortcut" aria-label="Search the library">Search <kbd>⌘ K</kbd></a>
+          <button type="button" id="theme-toggle" class="theme-button" aria-label="Switch to light theme" title="Switch to light theme">
+            <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M19 5l-1.5 1.5M6.5 17.5 5 19"/></svg>
+            <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M20 15A8 8 0 0 1 9 4a8 8 0 1 0 11 11Z"/></svg>
+          </button>
+          <a href={REPO} target="_blank" rel="noopener noreferrer" class="github-button hidden sm:inline-flex">GitHub ↗</a>
+        </div>
+        <nav class="mobile-nav flex w-full gap-5 overflow-x-auto border-t border-line pt-3 xl:hidden" aria-label="Collections">
+          {nav.map(([p, label]) => <a href={p} aria-current={isOn(p) ? 'page' : undefined} class="nav-link whitespace-nowrap">{label}</a>)}
+        </nav>
+      </div>
+    </header>
+    <main id="main" class="flex-1"><slot /></main>
+    <footer class="site-footer mt-24 border-t border-line">
+      <div class="wrap grid gap-10 py-12 md:grid-cols-[1.4fr_1fr_1fr]">
+        <div><Logo size={34} /><p class="mt-4 max-w-sm text-sm leading-relaxed text-muted">Free resources for making things with AI. Practical prompts, useful skills, MCP servers, and credit where it belongs.</p><p class="mt-5 text-sm font-semibold">{site.tagline}</p></div>
+        <div><p class="font-semibold">Explore the library</p><ul class="mt-4 space-y-3 text-sm text-muted"><li><a href="/images">Image prompts</a></li><li><a href="/videos">Video prompts</a></li><li><a href="/text">Text prompts</a></li><li><a href="/skills">Agent skills</a></li><li><a href="/mcp-servers">MCP servers</a></li></ul></div>
+        <div><p class="font-semibold">Made for sharing</p><ul class="mt-4 space-y-3 text-sm text-muted"><li><a href="/mcp">Connect your AI assistant</a></li><li><a href="/credits">Sources, licenses & credits</a></li><li><a href="/credits#removal">Request content removal</a></li><li><a href={REPO} target="_blank" rel="noopener noreferrer">Source code on GitHub ↗</a></li></ul></div>
+      </div>
+      <div class="wrap flex flex-wrap justify-between gap-3 border-t border-line py-5 text-xs text-muted"><span>Free to browse. No account. Open-source code.</span><span>PromptsBaba. Powered by people who share.</span></div>
+    </footer>
+    <script is:inline>
+      (() => {
+        const root = document.documentElement;
+        const button = document.getElementById('theme-toggle');
+        const sync = () => {
+          const dark = root.dataset.theme === 'dark';
+          const label = dark ? 'Switch to light theme' : 'Switch to dark theme';
+          button.setAttribute('aria-label', label); button.title = label;
+          document.querySelector('meta[name="theme-color"]').content = dark ? '#0B0F17' : '#F8FAFC';
+        };
+        button.addEventListener('click', () => {
+          root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark';
+          try { localStorage.setItem('promptsbaba-theme', root.dataset.theme); } catch {}
+          sync();
+        });
+        document.addEventListener('keydown', (event) => {
+          if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') { event.preventDefault(); location.href = '/search'; }
+        });
+        document.addEventListener('click', (event) => {
+          document.querySelectorAll('.prompt-menu[open]').forEach((menu) => { if (!menu.contains(event.target)) menu.removeAttribute('open'); });
+        });
+        document.addEventListener('keydown', (event) => { if (event.key === 'Escape') document.querySelectorAll('.prompt-menu[open]').forEach((menu) => { menu.removeAttribute('open'); menu.querySelector('summary').focus(); }); });
+        sync();
+      })();
+    </script>
+  </body>
+</html>

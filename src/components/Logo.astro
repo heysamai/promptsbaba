@@ -1,0 +1,13 @@
+---
+interface Props { size?: number; }
+const { size = 40 } = Astro.props;
+// The supplied symbols share a 478:563 canvas; preserve their original proportions.
+const width = Math.round(size * 478 / 563);
+---
+<span class="inline-flex items-center gap-2.5">
+  <span class="brand-symbol" style={`width:${width}px;height:${size}px`} aria-hidden="true">
+    <img class="brand-symbol-on-dark" src="/brand/promptsbaba-symbol-white.png" width={width} height={size} alt="" />
+    <img class="brand-symbol-on-light" src="/brand/promptsbaba-symbol-espresso.png" width={width} height={size} alt="" />
+  </span>
+  <span class="font-display text-xl font-extrabold tracking-[-0.055em]">PromptsBaba<span style="color:#E87516">.</span></span>
+</span>

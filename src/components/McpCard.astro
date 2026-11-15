@@ -1,0 +1,13 @@
+---
+import {mcpCategoryNames,type McpServer} from '../lib/mcp';
+interface Props{server:McpServer;}
+const{server:s}=Astro.props;
+---
+<article class="mcp-card">
+  <a href={`/mcp-servers/${s.slug}`} class="mcp-card-main">
+    <div class="mcp-card-identity"><span class="mcp-monogram" aria-hidden="true">{s.owner.slice(0,2).toUpperCase()}</span><span><span class="mcp-card-name">{s.name}</span><span class="mcp-card-owner">{s.deployment==='remote'?'Website':'Repository owner'}: {s.owner}</span></span><span class="mcp-card-arrow" aria-hidden="true">↗</span></div>
+    <p class="mcp-card-description">{s.description}</p>
+    <div class="mcp-card-tags"><span class:list={['deployment-tag',s.deployment==='remote'&&'deployment-remote']}>{s.deployment==='remote'?'Remote':'Self-hosted'}</span>{s.categories.slice(0,1).map(c=><span>{mcpCategoryNames[c]}</span>)}{s.languages.slice(0,1).map(l=><span>{l}</span>)}</div>
+  </a>
+
+</article>

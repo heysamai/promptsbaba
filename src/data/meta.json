@@ -1,0 +1,184 @@
+{
+  "sources": {
+    "jau123": {
+      "name": "NanoBanana Trending Prompts",
+      "by": "MeiGen.ai",
+      "url": "https://github.com/jau123/nanobanana-trending-prompts",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "youmind": {
+      "name": "Awesome Nano Banana Pro Prompts",
+      "by": "YouMind OpenLab",
+      "url": "https://github.com/YouMind-OpenLab/awesome-nano-banana-pro-prompts",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "zerolu": {
+      "name": "Awesome Nano Banana Pro",
+      "by": "ZeroLu",
+      "url": "https://github.com/ZeroLu/awesome-nanobanana-pro",
+      "license": "MIT",
+      "licenseUrl": "https://github.com/ZeroLu/awesome-nanobanana-pro/blob/main/LICENSE"
+    },
+    "freestylefly": {
+      "name": "Awesome GPT Image 2",
+      "by": "freestylefly",
+      "url": "https://github.com/freestylefly/awesome-gpt-image-2",
+      "license": "MIT",
+      "licenseUrl": "https://github.com/freestylefly/awesome-gpt-image-2/blob/main/LICENSE"
+    },
+    "evolink": {
+      "name": "Awesome GPT Image 2 API & Prompts",
+      "by": "EvoLink AI",
+      "url": "https://github.com/Evolink-AI/awesome-gpt-image-2-API-Prompts",
+      "license": "CC0 1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    },
+    "learnprompt": {
+      "name": "Awesome Seedance",
+      "by": "LearnPrompt",
+      "url": "https://github.com/LearnPrompt/awesome-seedance",
+      "license": "MIT",
+      "licenseUrl": "https://github.com/LearnPrompt/awesome-seedance/blob/main/LICENSE"
+    },
+    "youmindseedance": {
+      "name": "Awesome Seedance 2 Prompts",
+      "by": "YouMind OpenLab",
+      "url": "https://github.com/YouMind-OpenLab/awesome-seedance-2-prompts",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "oswseedance": {
+      "name": "Awesome Seedance Prompts",
+      "by": "opensource-works",
+      "url": "https://github.com/opensource-works/awesome-seedance-prompts",
+      "license": "MIT",
+      "licenseUrl": "https://github.com/opensource-works/awesome-seedance-prompts/blob/main/LICENSE"
+    },
+    "youmindgrok": {
+      "name": "Awesome Grok Imagine Prompts",
+      "by": "YouMind OpenLab",
+      "url": "https://github.com/YouMind-OpenLab/awesome-grok-imagine-prompts",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "youmindgptimage2": {
+      "name": "Awesome GPT Image 2",
+      "by": "YouMind OpenLab",
+      "url": "https://github.com/YouMind-OpenLab/awesome-gpt-image-2",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "youmindgptimage15": {
+      "name": "Awesome GPT Image 1.5",
+      "by": "YouMind OpenLab",
+      "url": "https://github.com/YouMind-OpenLab/awesome-gpt-image-1.5",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "youmindseedream": {
+      "name": "Awesome Seedream 4.5",
+      "by": "YouMind OpenLab",
+      "url": "https://github.com/YouMind-OpenLab/awesome-seedream-4.5",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "devanshug": {
+      "name": "Awesome AI Image Prompts",
+      "by": "devanshug2307",
+      "url": "https://github.com/devanshug2307/Awesome-AI-Image-Prompts",
+      "license": "MIT",
+      "licenseUrl": "https://github.com/devanshug2307/Awesome-AI-Image-Prompts/blob/main/LICENSE"
+    },
+    "evolinkh3": {
+      "name": "Awesome MiniMax H3 Prompts",
+      "by": "EvoLink AI",
+      "url": "https://github.com/Evolink-AI/awesome-minimax-H3-prompts",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "atlasomni": {
+      "name": "Awesome Gemini Omni Prompts",
+      "by": "Atlas Cloud",
+      "url": "https://github.com/AtlasCloudAI/awesome-gemini-omni-prompts",
+      "license": "CC0 1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    },
+    "promptschat": {
+      "name": "prompts.chat",
+      "by": "Fatih Kadir Akın & contributors",
+      "url": "https://github.com/f/prompts.chat",
+      "license": "CC0 1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    },
+    "voltagent": {
+      "name": "Awesome Claude Code Subagents",
+      "by": "VoltAgent",
+      "url": "https://github.com/VoltAgent/awesome-claude-code-subagents",
+      "license": "MIT",
+      "licenseUrl": "https://github.com/VoltAgent/awesome-claude-code-subagents/blob/main/LICENSE"
+    },
+    "wshobson": {
+      "name": "Claude Code Agents",
+      "by": "Seth Hobson",
+      "url": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "licenseUrl": "https://github.com/wshobson/agents/blob/main/LICENSE"
+    },
+    "geminisubagents": {
+      "name": "Awesome Gemini CLI Subagents",
+      "by": "Joseph Hampton",
+      "url": "https://github.com/JosephHampton/awesome-gemini-cli-subagents",
+      "license": "CC0 1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    },
+    "youmindgemini": {
+      "name": "Awesome Gemini 3 Prompts",
+      "by": "YouMind OpenLab",
+      "url": "https://github.com/YouMind-OpenLab/awesome-gemini-3-prompts",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "mustvlad": {
+      "name": "ChatGPT System Prompts",
+      "by": "mustvlad",
+      "url": "https://github.com/mustvlad/ChatGPT-System-Prompts",
+      "license": "MIT",
+      "licenseUrl": "https://github.com/mustvlad/ChatGPT-System-Prompts/blob/main/LICENSE"
+    },
+    "fabric": {
+      "name": "Fabric patterns",
+      "by": "Daniel Miessler",
+      "url": "https://github.com/danielmiessler/Fabric",
+      "license": "MIT",
+      "licenseUrl": "https://github.com/danielmiessler/Fabric/blob/main/LICENSE"
+    },
+    "llmpromptlibrary": {
+      "name": "LLM Prompt Library",
+      "by": "abilzerian",
+      "url": "https://github.com/abilzerian/LLM-Prompt-Library",
+      "license": "MIT",
+      "licenseUrl": "https://github.com/abilzerian/LLM-Prompt-Library/blob/main/LICENSE"
+    },
+    "anthropic": {
+      "name": "Anthropic Skills",
+      "by": "Anthropic",
+      "url": "https://github.com/anthropics/skills",
+      "license": "Per-skill license",
+      "licenseUrl": "https://github.com/anthropics/skills"
+    }
+  },
+  "categories": [
+    "portrait-avatar",
+    "photography",
+    "product-brand",
+    "food-drink",
+    "poster",
+    "social-media",
+    "infographic-ui",
+    "illustration-3d",
+    "comic-anime",
+    "creative"
+  ]
+}

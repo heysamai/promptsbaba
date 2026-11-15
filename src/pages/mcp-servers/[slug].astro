@@ -1,0 +1,6 @@
+---
+import Detail from '../../views/McpServer.astro';
+import { mcpServers } from '../../lib/mcp';
+export const getStaticPaths = () => mcpServers.map(server=>({params:{slug:server.slug},props:{server}}));
+---
+<Detail server={Astro.props.server} />

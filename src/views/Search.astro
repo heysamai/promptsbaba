@@ -1,0 +1,255 @@
+---
+import Base from '../layouts/Base.astro';
+import { ui, href, categoryLabels, type Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = ui[lang];
+const s = t.searchPage;
+// Everything the client script needs, in the page's language.
+const cfg = {
+  cats: categoryLabels[lang],
+  imageBase: href(lang, '/prompt/'),
+  textBase: href(lang, '/text-prompt/'),
+  videoBase: href(lang, '/video/'),
+  loadFailed: s.loadFailed,
+  start: s.start,
+  none: s.none,
+  suggest: s.suggest,
+};
+---
+
+<Base lang={lang} title={s.title} description={s.metaDesc} noindex>
+  <div class="wrap pt-10">
+    <p class="label">{s.label}</p>
+    <h1 class="display mt-2 text-4xl sm:text-6xl">{s.title}</h1>
+    <input id="q" type="search" autofocus placeholder={t.searchHint} aria-label={t.searchPrompts} class="field mt-6 max-w-2xl text-lg" />
+    <p class="mt-2 text-sm text-muted">{s.hint}</p>
+    <p id="status" class="mt-6 font-mono text-sm text-muted">{s.loading}</p>
+    <div id="suggest" class="mt-4 flex flex-wrap gap-2"></div>
+
+    <section id="sec-m" class="hidden pt-6"><div class="sec"><span id="n-m" class="label"></span><h2>MCP servers</h2></div><div id="res-m" class="mcp-grid mt-6"></div></section>
+    <section id="sec-s" class="hidden pt-6"><div class="sec"><span id="n-s" class="label"></span><h2>Agent skills & repositories</h2></div><div id="res-s" class="mt-4 grid gap-x-8 sm:grid-cols-2"></div></section>
+
+    <section id="sec-i" class="hidden pt-6">
+      <div class="sec">
+        <span id="n-i" class="label"></span>
+        <h2>{s.images}</h2>
+      </div>
+      <div id="res-i" class="masonry mt-6"></div>
+    </section>
+    <section id="sec-v" class="hidden pt-10">
+      <div class="sec">
+        <span id="n-v" class="label"></span>
+        <h2>{s.videos}</h2>
+      </div>
+      <div id="res-v" class="mt-6 grid grid-cols-2 gap-x-5 gap-y-7 md:grid-cols-3 lg:grid-cols-4"></div>
+    </section>
+    <section id="sec-t" class="hidden pt-10">
+      <div class="sec">
+        <span id="n-t" class="label"></span>
+        <h2>{s.text}</h2>
+      </div>
+      <div id="res-t" class="mt-2 grid sm:grid-cols-2 sm:gap-x-10"></div>
+    </section>
+  </div>
+</Base>
+
+<script id="library-search-config" type="application/json" set:html={JSON.stringify(cfg).replace(/</g, '\\u003c')} />
+<script>
+  import { mcpCard } from '../scripts/mcp-card';
+  const cfg = JSON.parse(document.querySelector('#library-search-config')!.textContent!);
+  (async () => {
+    const $ = (id) => document.getElementById(id);
+    const input = $('q');
+    const MAX = 48;
+    let idx;
+    try {
+      idx = await (await fetch('/search-index.json')).json();
+    } catch {
+      $('status').textContent = cfg.loadFailed;
+      return;
+    }
+    const suggest = $('suggest');
+    const el = (tag, cls, text) => {
+      const e = document.createElement(tag);
+      if (cls) e.className = cls;
+      if (text != null) e.textContent = text;
+      return e;
+    };
+    const imageCard = ([title, slug, cat, img]) => {
+      const a = el('a', 'tile group block');
+      a.href = cfg.imageBase + slug;
+      const frame = el('span', 'tile-img');
+      const im = el('img', 'block min-h-20 w-full');
+      im.src = img;
+      im.alt = title;
+      im.loading = 'lazy';
+      im.referrerPolicy = 'no-referrer';
+      im.onerror = () => (a.style.display = 'none');
+      frame.append(im);
+      const cap = el('span', 'mt-2.5 block');
+      cap.append(
+        el('span', 'line-clamp-2 block text-[15px] font-semibold leading-snug', title),
+        el('span', 'label mt-1 block', cfg.cats[cat] || cat),
+      );
+      a.append(frame, cap);
+      return a;
+    };
+    const videoCard = ([title, slug, model, poster, , clip]) => {
+      const a = el('a', 'tile group block');
+      a.href = cfg.videoBase + slug;
+      const frame = el('span', 'tile-img aspect-video overflow-hidden');
+      if (poster) {
+        const im = el('img', 'h-full w-full object-cover');
+        im.src = poster;
+        im.alt = title;
+        im.loading = 'lazy';
+        im.referrerPolicy = 'no-referrer';
+        im.onerror = () => (im.style.visibility = 'hidden');
+        frame.append(im);
+      } else if (clip) {
+        // No poster: show a frame of the clip.
+        const vid = el('video', 'h-full w-full object-cover');
+        vid.src = clip + '#t=0.5';
+        vid.muted = true;
+        vid.playsInline = true;
+        vid.preload = 'metadata';
+        vid.tabIndex = -1;
+        vid.setAttribute('aria-hidden', 'true');
+        frame.append(vid);
+      }
+      const cap = el('span', 'mt-2.5 block');
+      cap.append(el('span', 'line-clamp-2 block text-[15px] font-semibold leading-snug', title), el('span', 'label mt-1 block', model));
+      a.append(frame, cap);
+      return a;
+    };
+    const textCard = ([title, slug]) => {
+      const a = el('a', 'row px-1 !py-3 font-semibold', title);
+      a.href = cfg.textBase + slug;
+      return a;
+    };
+    const resourceCard = (row, kind) => {
+      const [title, ref, description] = row;
+      const a = el('a', kind === 'm' ? 'mcp-card' : 'row', '');
+      a.href = kind === 'm' ? '/mcp-servers/' + ref : ref;
+      if (kind === 's') { a.target = '_blank'; a.rel = 'noopener noreferrer'; }
+      a.append(el('span', 'mcp-card-name', title), el('p', 'mcp-card-description', description));
+      const labels = kind === 'm' ? row[7].join(' · ') : 'Repository: ' + row[3];
+      a.append(el('span', 'text-xs text-muted', labels));
+      return a;
+    };
+    const run = () => {
+      const q = input.value.trim().toLowerCase();
+      const words = q.split(/\s+/).filter(Boolean);
+      history.replaceState(null, '', q ? '?q=' + encodeURIComponent(q) : location.pathname);
+      if (!words.length) {
+        $('status').textContent = cfg.start;
+        $('sec-i').classList.add('hidden');
+        $('sec-v').classList.add('hidden');
+        $('sec-t').classList.add('hidden');
+        $('sec-m').classList.add('hidden');
+        $('sec-s').classList.add('hidden');
+        suggest.replaceChildren();
+        return;
+      }
+      const hit = (s) => words.every((w) => s.includes(w));
+      const im = idx.i.filter((r) => hit((r[0] + ' ' + (cfg.cats[r[2]] || '') + ' ' + r[4]).toLowerCase()));
+      const vd = (idx.v || []).filter((r) => hit((r[0] + ' ' + r[2] + ' ' + r[4]).toLowerCase()));
+      const tx = idx.t.filter((r) => hit(r[0].toLowerCase()));
+      const mc = (idx.m || []).filter(r => hit((r[0] + ' ' + r[2] + ' ' + r[6] + ' ' + r[7].join(' ')).toLowerCase()));
+      const sk = (idx.s || []).filter(r => hit((r[0] + ' ' + r[2] + ' ' + r[3]).toLowerCase()));
+      const total = im.length + vd.length + tx.length + mc.length + sk.length;
+      $('status').textContent = total ? '' : cfg.none + ' "' + input.value.trim() + '".';
+      suggest.replaceChildren();
+      if (!total) {
+        const label = document.createElement('span');
+        label.className = 'text-xs text-muted uppercase tracking-[0.1em]';
+        label.textContent = cfg.suggest;
+        suggest.appendChild(label);
+        const seen = new Set();
+        const chips = [];
+        // 1. Shorter query first (most likely to help).
+        if (words.length > 1) {
+          const shorter = words.slice(0, -1).join(' ');
+          const hitShort = (s) => words.slice(0, -1).every((w) => s.includes(w));
+          const shorterTotal =
+            idx.i.filter((r) => hitShort((r[0] + ' ' + (cfg.cats[r[2]] || '') + ' ' + r[4]).toLowerCase())).length +
+            (idx.v || []).filter((r) => hitShort((r[0] + ' ' + r[2] + ' ' + r[4]).toLowerCase())).length +
+            idx.t.filter((r) => hitShort(r[0].toLowerCase())).length;
+          if (shorterTotal > 0) {
+            chips.push({ text: shorter, score: 3 });
+            seen.add(shorter);
+          }
+        }
+        // 2. Categories/models whose name shares a word with the query.
+        for (const r of idx.i) {
+          const cat = cfg.cats[r[2]] || r[2];
+          if (cat && !seen.has(cat)) {
+            const score = words.some((w) => cat.toLowerCase().includes(w)) ? 2 : 0;
+            if (score > 0) {
+              chips.push({ text: cat, score });
+              seen.add(cat);
+            }
+          }
+        }
+        for (const r of (idx.v || [])) {
+          if (r[2] && !seen.has(r[2])) {
+            const score = words.some((w) => r[2].toLowerCase().includes(w)) ? 2 : 0;
+            if (score > 0) {
+              chips.push({ text: r[2], score });
+              seen.add(r[2]);
+            }
+          }
+        }
+        chips.sort((a, b) => b.score - a.score);
+        // 3. Fill with most popular categories if there is room (max 6 total).
+        const catCounts = {};
+        for (const r of idx.i) {
+          const cat = cfg.cats[r[2]] || r[2];
+          if (cat) catCounts[cat] = (catCounts[cat] || 0) + 1;
+        }
+        const popularCats = Object.entries(catCounts)
+          .filter(([cat]) => !seen.has(cat))
+          .sort((a, b) => b[1] - a[1])
+          .map(([cat]) => cat);
+        for (const cat of popularCats) {
+          if (chips.length >= 6) break;
+          chips.push({ text: cat, score: 1 });
+          seen.add(cat);
+        }
+        for (const chip of chips.slice(0, 6)) {
+          const c = document.createElement('button');
+          c.type = 'button';
+          c.className = 'label border border-ink bg-surface px-2.5 py-1 text-sm hover:bg-mark transition-colors';
+          c.textContent = chip.text;
+          c.addEventListener('click', () => {
+            input.value = chip.text;
+            input.dispatchEvent(new Event('input'));
+          });
+          suggest.appendChild(c);
+        }
+      }
+      const show = (key, list, card) => {
+        $('sec-' + key).classList.toggle('hidden', !list.length);
+        $('n-' + key).textContent = list.length > MAX ? `${MAX} / ${list.length}` : String(list.length);
+        $('res-' + key).replaceChildren(...list.slice(0, MAX).map(card));
+      };
+      show('i', im, imageCard);
+      show('v', vd, videoCard);
+      show('t', tx, textCard);
+      show('m', mc, mcpCard);
+      show('s', sk, r => resourceCard(r, 's'));
+      if (mc.length > MAX) { const all = el('a', 'link col-span-full text-sm', 'See all ' + mc.length.toLocaleString('en-US') + ' matching MCP projects'); all.href = '/mcp-servers?q=' + encodeURIComponent(input.value.trim()); $('res-m').append(all); }
+    };
+    input.value = new URLSearchParams(location.search).get('q') || '';
+    let timer;
+    input.addEventListener('input', () => {
+      clearTimeout(timer);
+      timer = setTimeout(run, 150);
+    });
+    run();
+  })();
+</script>

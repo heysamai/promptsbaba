@@ -1,0 +1,337 @@
+// The site is English only. The `lang` plumbing stays so another language can be added later:
+// add its code to LANGS, a dictionary below, and a set of route files under src/pages/<code>/.
+export type Lang = 'en';
+export const LANGS: Lang[] = ['en'];
+export const DEFAULT_LANG: Lang = 'en';
+
+/** Root-relative path for the given locale. */
+export const href = (_lang: Lang, path: string) => path;
+
+/** Pathname without a locale prefix. */
+export const barePath = (pathname: string) => pathname || '/';
+
+const n = (x: number) => x.toLocaleString('en-US');
+
+export const categoryLabels: Record<Lang, Record<string, string>> = {
+  en: {
+    'portrait-avatar': 'Portraits & Avatars',
+    photography: 'Photography',
+    'product-brand': 'Product & Brand',
+    'food-drink': 'Food & Drink',
+    poster: 'Posters & Ads',
+    'social-media': 'Social Media',
+    'infographic-ui': 'Infographics & UI',
+    'illustration-3d': 'Illustration & 3D',
+    'comic-anime': 'Comics & Anime',
+    creative: 'Creative Experiments',
+  },
+};
+
+const en = {
+  langName: 'English',
+  langShort: 'EN',
+  siteDesc: 'Free AI prompts, agent skills, and a source-attributed MCP server directory. Find a starting point and get to work.',
+  nav: { images: 'Images', videos: 'Videos', text: 'Text', skills: 'Skills', credits: 'Credits', donate: 'Donate' },
+  skip: 'Skip to content',
+  navLabel: 'Main',
+  langLabel: 'Language',
+  theme: { toDark: 'Switch to dark theme', toLight: 'Switch to light theme' },
+  github: { star: 'GitHub', starLabel: (n: string) => `PromptsBaba on GitHub, ${n} stars`, source: 'Source code on GitHub' },
+  filter: {
+    label: 'Filter',
+    placeholder: 'Type to filter by keyword…',
+    showing: (c: number, total: number) => `${n(c)} of ${n(total)}`,
+    none: 'Nothing matches that filter.',
+    clear: 'Clear',
+  },
+  home: 'home',
+  search: 'Search',
+  searchPrompts: 'Search the library',
+  searchHint: 'product, poster, logo, resume…',
+  collection: 'Collection',
+  about: 'About',
+  more: 'More',
+  page: (p: number) => `page ${p}`,
+  prev: '← Previous',
+  next: 'Next →',
+  pagination: 'Pages',
+  all: 'All',
+
+  footer: {
+    blurb: 'Ready-made prompts for working with AI. Collected from open-source projects, with sources, licenses, and original authors credited where known.',
+    collections: 'Collections',
+    imagePrompts: 'Image prompts',
+    videoPrompts: 'Video prompts',
+    textPrompts: 'Text prompts',
+    agentSkills: 'Agent skills',
+    mcp: 'MCP server for AI agents',
+    sources: 'Sources, licenses & credits',
+    takedown: 'Request content removal',
+    donate: 'Support this site',
+    strip: 'Free · no account · open source',
+  },
+
+  homeTitle: 'PromptsBaba · AI prompts, agent skills & MCP servers',
+  hero: {
+    label: 'Free to browse. No account needed.',
+    line1: 'AI prompts for',
+    line3: 'ready to copy.',
+    words: ['product shots', 'festive posters', 'food menus', 'shop logos', 'infographics', 'video thumbnails'],
+    lead: (total: number) =>
+      `${n(total)} prompts for generating images, making videos and writing with AI, most with a sample result. Pick one, fill in the blanks, paste into Gemini or ChatGPT.`,
+    statImages: 'image prompts',
+    statVideos: 'video prompts',
+    statText: 'text prompts',
+    statSkills: 'agent skills',
+    statCopied: 'prompts copied',
+  },
+  secCategories: 'Browse by category',
+  secPopular: 'Most liked',
+  secCurated: 'Curated picks',
+  secVideos: 'Video prompts',
+  allVideos: 'All video prompts →',
+  secText: 'Text prompts',
+  allImages: 'All image prompts →',
+  allText: 'All text prompts →',
+  skillsTeaser: {
+    title: 'Skills for AI agents',
+    body: 'A skill is a folder of instructions that teaches an agent such as Claude to do one job properly: produce a PDF, build slides, design an interface.',
+    cta: (c: number) => `See ${c} skills`,
+  },
+
+  images: {
+    title: 'Image prompts',
+    metaTitle: 'AI image prompts',
+    metaDesc: (c: number) => `${n(c)} free AI image prompts with sample results for Nano Banana, GPT Image and more.`,
+    lead: (c: number) => `${n(c)} prompts with sample results. Open any one to copy its prompt.`,
+    crumbCategory: 'category',
+    catMetaTitle: (label: string) => `${label} prompts`,
+    catMetaDesc: (c: number, label: string) => `${n(c)} free AI image prompts in ${label}, each with a sample result.`,
+    catLead: (c: number) => `${n(c)} prompts in this category.`,
+    count: (c: number) => `×${c}`,
+  },
+
+  prompt: {
+    metaTitle: (title: string, model: string) => `${title} · ${model} prompt`,
+    model: 'Model',
+    category: 'Category',
+    likes: 'Likes',
+    date: 'Date',
+    example: (i: number) => `example ${i}`,
+    credits: 'Credits',
+    author: 'Original author',
+    post: 'Original post',
+    viewSource: 'View source ↗',
+    collection: 'Collection',
+    by: 'by',
+    imageNote: 'Sample images belong to the original author.',
+    takedown: 'Request removal',
+    sameCategory: 'In the same category',
+  },
+
+  videos: {
+    title: 'Video prompts',
+    metaTitle: 'AI video prompts',
+    metaDesc: (c: number) => `${n(c)} free AI video prompts for Seedance, Grok Imagine and other video models, each with a sample clip.`,
+    lead: (c: number) => `${n(c)} prompts for Seedance, Grok Imagine and other video models, each with its sample clip. Open any one to copy its prompt.`,
+    detailMeta: (title: string, model: string) => `${title} · ${model} video prompt`,
+    engagement: 'Engagement',
+    watch: 'Watch on the original post ↗',
+    clipNote: 'The sample clip plays from the original collection’s server.',
+    ownerNote: 'Sample clips belong to the original author.',
+    more: 'More video prompts',
+    byModel: 'AI model',
+    modelMetaTitle: (model: string) => `${model} video prompts`,
+    modelMetaDesc: (c: number, model: string) => `${n(c)} free ${model} video prompts, each with its sample clip and the full prompt to copy.`,
+    modelLead: (c: number, model: string) => `${n(c)} prompts written for ${model}, each with its sample clip.`,
+    crumbModel: 'model',
+  },
+
+  box: { prompt: 'Prompt', copy: 'Copy', copied: 'Copied', failed: 'Failed', fill: 'Fill in the blanks', count: 'Copied {n} times' },
+  copiedTotal: 'prompts copied',
+
+  text: {
+    title: 'Text prompts',
+    metaTitle: 'AI text prompts',
+    metaDesc: (c: number) => `${n(c)} free text prompts for ChatGPT, Claude, Gemini and other AI models.`,
+    lead: (c: number) => `${n(c)} prompts for ChatGPT, Claude and Gemini: roles, writing and analysis prompts, and ready-made agent prompts for Claude Code and Gemini CLI.`,
+    types: { text: 'Text', structured: 'Structured', image: 'Image', agent: 'Agent' } as Record<string, string>,
+    dev: 'developer',
+    detailMeta: (title: string) => `${title} · AI text prompt`,
+    contributor: 'Contributor',
+    collection: 'Collection',
+    others: 'Other prompts',
+    byType: 'Type',
+    byModel: 'Written for',
+    model: 'Written for',
+    modelMetaTitle: (model: string) => (model === 'Any model' ? 'AI text prompts for any model' : `${model} prompts`),
+    modelMetaDesc: (c: number, model: string) =>
+      model === 'Any model' ? `${n(c)} free text prompts that work in ChatGPT, Claude, Gemini and other chat models.` : `${n(c)} free prompts written for ${model}, ready to copy.`,
+    modelLead: (c: number, model: string) => (model === 'Any model' ? `${n(c)} prompts that work in any chat model.` : `${n(c)} prompts written for ${model}.`),
+    crumbModel: 'model',
+    viewSource: 'View in the original collection ↗',
+    forDevs: 'For developers',
+    typeMetaTitle: (label: string) => `${label} AI text prompts`,
+    // Search titles and descriptions for each type page; falls back to typeMetaTitle.
+    typeMeta: {
+      text: ['Plain-text AI prompts', (c: number) => `${n(c)} free plain-text prompts for ChatGPT, Claude, Gemini and other chat models, ready to copy.`],
+      structured: ['Structured AI prompts in JSON and YAML', (c: number) => `${n(c)} free structured prompts written as JSON, YAML or templates, for consistent AI output.`],
+      image: ['Text prompts for AI image generators', (c: number) => `${n(c)} free written prompts to paste into ChatGPT, Gemini or another image generator.`],
+      agent: ['AI agent and subagent prompts', (c: number) => `${n(c)} free system prompts for AI agents and subagents in Claude Code, Gemini CLI and other agent tools.`],
+      developer: ['AI prompts for developers', (c: number) => `${n(c)} free prompts for coding, debugging, code review and other developer work.`],
+    } as Record<string, [string, (c: number) => string]>,
+    typeLead: (c: number, label: string) => `${n(c)} prompts in ${label}.`,
+    crumbType: 'type',
+  },
+
+  skills: {
+    title: 'Agent skills',
+    metaTitle: 'AI agent skills',
+    metaDesc: 'Open-source skills for AI agents such as Claude Code: motion design, video, interface design, PDF, slides, spreadsheets and more.',
+    leadA: 'A skill is a folder of instructions (',
+    leadB: ') that teaches an AI agent such as Claude to do one job. Download it from the original repo and put it in your agent’s skills folder.',
+    licenses: { apache: 'Apache 2.0', proprietary: 'Anthropic, read-only', none: 'Not stated' } as Record<string, string>,
+    source: 'Source',
+    by: 'by',
+    note: 'Each skill has its own license. Check the LICENSE.txt file in the skill folder before modifying or redistributing it.',
+    official: 'Official skills from Anthropic',
+    community: 'Community skills',
+    communityLead: 'Open-source skills from other teams and makers, linked to their own repositories. Each one is published under the license shown.',
+    topics: { motion: 'Motion design & video', design: 'Interface & visual design', more: 'Collections & other fields' } as Record<string, string>,
+    stars: (c: number) => `★ ${n(c)}`,
+    groupAll: 'All',
+    groupOfficial: 'Official',
+    mcpCallout: 'Want your agent to search these prompts itself?',
+    mcpLink: 'Connect the PromptsBaba MCP server',
+  },
+
+  mcp: {
+    label: 'For AI agents',
+    title: 'PromptsBaba MCP server',
+    metaTitle: 'PromptsBaba MCP server: AI prompts inside Claude, Cursor and ChatGPT',
+    metaDesc: 'Free remote MCP server: let Claude, Claude Code, Cursor, VS Code, Windsurf, Zed, Cline or ChatGPT search 7,000+ image, video and text prompts and fill them in for you. No sign-in.',
+    lead: 'Connect PromptsBaba to your AI assistant and ask it for a prompt in plain words. It searches every image, video and text prompt on this site, picks one that fits, and fills it in with your details. Free, read-only, no account or API key.',
+    urlLabel: 'Server URL',
+    copy: 'Copy',
+    copied: 'Copied',
+    setupTitle: 'Set it up',
+    toolsTitle: 'What it can do',
+    tryTitle: 'Things to ask',
+    tries: [
+      'Find a Nano Banana prompt for a product photo of my coffee bag on marble, and fill it in.',
+      'Give me a Seedance prompt for a cinematic drone shot over a city at night.',
+      'I need a system prompt for a code review agent in Claude Code.',
+      'Show me three poster prompts for a jazz night, with sample images.',
+    ],
+    tools: [
+      ['search_prompts', 'Searches image, video and text prompts by what you want to make, with filters for type, AI model and category.'],
+      ['get_prompt', 'Returns the full prompt, its fill-in slots, sample images or video, and credit to the original author.'],
+      ['list_filters', 'Lists the categories and AI models, with how many prompts each has.'],
+      ['random_prompt', 'Picks one prompt at random, with the same filters, for when you just want an idea.'],
+    ] as [string, string][],
+    clients: {
+      claudeCode: 'Claude Code',
+      claudeCodeNote: 'Run in your terminal:',
+      plugin: 'Claude Code plugin (server plus a skill)',
+      pluginNote: 'Inside Claude Code, run:',
+      claudeApp: 'Claude (claude.ai and the desktop app)',
+      claudeAppNote: 'Open Settings › Connectors › Add custom connector, name it PromptsBaba and paste the server URL.',
+      cursor: 'Cursor',
+      cursorNote: 'Add to ~/.cursor/mcp.json:',
+      vscode: 'VS Code',
+      vscodeNote: 'Run in your terminal:',
+      windsurf: 'Windsurf',
+      windsurfNote: 'Add to ~/.codeium/windsurf/mcp_config.json:',
+      zed: 'Zed',
+      zedNote: 'Add to ~/.config/zed/settings.json:',
+      cline: 'Cline',
+      clineNote: 'Add to cline_mcp_settings.json:',
+      chatgpt: 'ChatGPT',
+      chatgptNote: 'Turn on developer mode in Settings › Apps & Connectors, then create a connector with the server URL and no authentication.',
+      other: 'Other clients',
+      otherNote: 'Any client that supports remote (Streamable HTTP) servers can use the URL directly. For clients that only run local servers:',
+    },
+    openSource: 'The server is open source, in the',
+    openSourceLink: 'PromptsBaba repository',
+    credit: 'Every prompt comes from an open-source collection and is returned with its author and license, so your assistant can credit them.',
+  },
+
+  searchPage: {
+    label: 'Search',
+    title: 'Search the library',
+    metaDesc: 'Search AI prompts, agent skills and MCP server projects.',
+    hint: 'Most prompts are written in English, so English keywords return the most results.',
+    loading: 'Loading index…',
+    loadFailed: 'The search index failed to load. Try reloading the page.',
+    start: 'Type a keyword to start searching.',
+    none: 'No results for',
+    suggest: 'Try:',
+    images: 'Image prompts',
+    videos: 'Video prompts',
+    text: 'Text prompts',
+  },
+
+  faq: {
+    title: 'Questions and answers',
+    items: [
+      [
+        'What is PromptsBaba?',
+        'PromptsBaba is a free library of ready-made AI prompts for generating images, making videos and writing with AI, plus skills for AI agents. Prompts come from credited open-source collections, with individual authors named where known and sample results where available.',
+      ],
+      [
+        'Is it really free?',
+        'Yes. There is no account, no ads and no paywall. Every prompt can be copied straight away. Browse and copy without signing up. The AI tools you use may have their own fees.',
+      ],
+      [
+        'Which AI models do the prompts work with?',
+        'Image prompts are written for Nano Banana and Nano Banana Pro (Gemini), GPT Image 1.5 and GPT Image 2 (ChatGPT) and Seedream 4.5. Video prompts are written for Seedance, Gemini Omni, MiniMax Hailuo, Grok Imagine and similar video models. Text prompts work in ChatGPT, Claude, Gemini and most other chat models.',
+      ],
+      [
+        'How do I use a prompt?',
+        'Open a prompt, fill in any blanks such as [OBJECT] using the fields above the text, press Copy, then paste it into the AI tool of your choice. For image prompts that mention a reference photo, upload your own photo together with the prompt.',
+      ],
+      [
+        'Can I use the prompts and results commercially?',
+        'Each collection has its own open license (MIT, CC BY 4.0 or CC0), listed on the Credits page; CC BY asks you to credit the author. The sample images and clips belong to their authors. What you generate yourself is governed by the terms of the AI tool you use.',
+      ],
+    ] as [string, string][],
+  },
+
+  support: {
+    title: 'A little credit goes a long way.',
+    body: 'These resources exist because people shared their work. Meet the creators and collections behind the library.',
+    cta: 'Explore the credits',
+  },
+
+  notFound: {
+    title: 'Page not found',
+    body: 'This page does not exist or has been removed.',
+    home: 'Back to home',
+    search: 'Search prompts',
+  },
+
+  credits: {
+    title: 'Sources, licenses & credits',
+    metaDesc: 'The open-source projects behind the content on PromptsBaba, with their licenses.',
+    lead: 'The content on PromptsBaba is collected from the open-source projects below. Each prompt identifies its source collection and license, with individual author and original-post links where available. Some titles are shortened and categories regrouped; prompt text is unchanged.',
+    thCollection: 'Collection',
+    thBy: 'By',
+    thLicense: 'License',
+    thUsed: 'Used for',
+    usedImages: (c: number) => `${n(c)} image prompts`,
+    usedVideos: (c: number) => `${n(c)} video prompts`,
+    usedText: (c: number) => `${n(c)} text prompts`,
+    usedSkills: (c: number) => `${n(c)} skills (links only)`,
+    communityNote: (c: number) => `The Skills page also links to ${n(c)} community skill repositories. Only their names, descriptions and licenses are shown; the skills themselves stay in their own repositories.`,
+    perSkill: 'Per-skill license',
+    imagesTitle: 'About the sample images',
+    imagesBody: 'Sample images and video clips are displayed directly from the original collections’ servers and remain the property of their authors. PromptsBaba does not store copies of them.',
+    takedownTitle: 'Request content removal',
+    takedownA: 'If you own content shown here and want it removed, open a content removal request in our repository.',
+    takedownB: 'Include the page URL and a link that identifies you as its owner.',
+  },
+};
+
+type Dict = typeof en;
+
+export const ui: Record<Lang, Dict> = { en };

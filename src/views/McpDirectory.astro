@@ -1,0 +1,42 @@
+---
+import Base from '../layouts/Base.astro';
+import McpCard from '../components/McpCard.astro';
+import Pagination from '../components/Pagination.astro';
+import { mcpServers, mcpCategories, mcpLanguages, mcpSources, mcpRemoteCount } from '../lib/mcp';
+import { itemList } from '../lib/seo';
+interface Props { page: any; category?: string; }
+const {page,category=''} = Astro.props;
+const selected=mcpCategories.find(c=>c.slug===category);
+const title=selected ? `${selected.name} MCP servers` : 'MCP servers';
+const suffix=page.currentPage>1 ? ` · Page ${page.currentPage}`:'';
+const crumbs: [string,string][] = selected ? [['MCP servers','/mcp-servers'],[selected.name,`/mcp-servers/category/${selected.slug}`]] : [['MCP servers','/mcp-servers']];
+---
+<Base lang="en" title={title+suffix} description={`Browse ${page.total.toLocaleString('en-US')} ${selected?.name || ''} MCP projects with source descriptions, languages and project setup links.`} crumbs={crumbs} schema={[itemList('en',page.data.map(s=>`/mcp-servers/${s.slug}`))]}>
+  <div class="wrap directory-wrap">
+    <div class="directory-intro"><div><p class="text-sm font-semibold text-mark">Give your AI a connection.</p><h1 class="display mt-4 text-4xl sm:text-6xl">{title}</h1><p class="mt-5 max-w-2xl text-muted leading-relaxed">Find a server for your databases, browsers, files, and everyday tools. Explore the project, then follow its own setup instructions.</p></div><div class="directory-source-summary"><strong>{mcpServers.length.toLocaleString('en-US')}</strong><span>source-listed entries · {mcpRemoteCount.toLocaleString('en-US')} remote</span><a class="link" href="#directory-source">Source collections</a></div></div>
+    <div class="directory-shortcuts"><a class:list={['chip',!category&&'chip-on']} href="/mcp-servers">All projects</a>{['browser-automation','databases','developer-tools','knowledge-memory','search','workplace-and-productivity'].map(slug=>mcpCategories.find(c=>c.slug===slug)).filter(Boolean).map(c=>c&&<a class:list={['chip',category===c.slug&&'chip-on']} href={`/mcp-servers/category/${c.slug}`}>{c.name}</a>)}</div>
+    <form id="mcp-filter" class="directory-filter" data-category={category}>
+      <label class="directory-query">Search projects<input id="mcp-q" type="search" name="q" placeholder="Search by name, task, or tool…" autocomplete="off" /></label>
+      <label>Category<select id="mcp-category" name="category"><option value="">All categories</option>{mcpCategories.map(c=><option value={c.slug} selected={category===c.slug}>{c.name} ({c.count.toLocaleString('en-US')})</option>)}</select></label>
+      <label>Deployment<select id="mcp-deployment" name="deployment"><option value="">All deployments</option><option value="remote">Remote</option><option value="self-hosted">Self-hosted</option></select></label>
+      <label>Language<select id="mcp-language" name="language"><option value="">Any language</option>{mcpLanguages.map(l=><option value={l}>{l}</option>)}</select></label>
+      <label>Integrates with<select id="mcp-integration" name="integration"><option value="">Any target</option><option value="cloud">Remote APIs</option><option value="local">Local software</option><option value="embedded">Embedded systems</option></select></label>
+      <button type="reset" class="directory-reset">Clear filters</button>
+    </form>
+    <noscript><p class="mt-4 text-sm text-muted">Browse categories and pages using the links below. Keyword and dropdown filters need JavaScript.</p></noscript>
+    <div class="directory-result-heading"><p id="mcp-status" aria-live="polite">{page.total.toLocaleString('en-US')} projects{selected&&` in ${selected.name}`}. Page {page.currentPage} of {page.lastPage}.</p><p>Imported listings · Not independently tested</p></div>
+    <div id="mcp-static"><div class="mcp-grid">{page.data.map(s=><McpCard server={s} />)}</div><Pagination page={page} lang="en" /></div>
+    <div id="mcp-results" class="mcp-grid" hidden></div>
+    <div id="mcp-empty" class="directory-empty" hidden><h2>No projects match those filters.</h2><p>Try a broader search or clear a filter.</p><button type="button" class="btn-line" id="mcp-empty-reset">Clear filters</button></div>
+    <button type="button" id="mcp-more" class="btn-line mt-6" hidden>Show more projects</button>
+    <aside id="directory-source" class="directory-source"><h2>Sources and attribution</h2>
+      {mcpSources.map(source=><p>Listings adapted from <a href={source.repository} target="_blank" rel="noopener noreferrer" class="link">{source.name}</a> by {source.author}. Imported {source.importedAt.slice(0,10)} from <a class="link" href={source.snapshotUrl} target="_blank" rel="noopener noreferrer">snapshot {source.revision.slice(0,8)}</a>. <a class="link" href={source.localLicenseUrl}>Collection license: MIT</a>.</p>)}
+      <p>Remote listings provide a hosted endpoint and source-listed authentication. Self-hosted listings link to installable projects. “Remote APIs” and “Local software” describe integration targets, not deployment.</p>
+      <p>Project licenses, costs and client compatibility are described in each project’s documentation.</p>
+      <p>Looking for our library connector? <a href="/mcp" class="link">Connect your assistant to our prompts.</a></p>
+    </aside>
+  </div>
+</Base>
+<script>
+  import '../scripts/mcp-directory';
+</script>

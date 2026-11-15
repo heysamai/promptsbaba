@@ -1,0 +1,14 @@
+{
+  "name": "promptsbaba",
+  "owner": { "name": "heysamai", "url": "https://github.com/heysamai" },
+  "metadata": { "description": "Free AI prompts for images, video and text from promptsbaba.com." },
+  "plugins": [
+    {
+      "name": "promptsbaba",
+      "source": "./plugins/promptsbaba",
+      "description": "Search 7,000+ free image, video and text prompts on promptsbaba.com and fill them in for your task.",
+      "category": "productivity",
+      "homepage": "https://promptsbaba.com/mcp"
+    }
+  ]
+}

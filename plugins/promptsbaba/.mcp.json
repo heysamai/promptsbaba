@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "promptsbaba": {
+      "type": "http",
+      "url": "https://promptsbaba.com/api/mcp"
+    }
+  }
+}

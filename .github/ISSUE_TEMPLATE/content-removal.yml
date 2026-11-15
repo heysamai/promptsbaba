@@ -1,0 +1,21 @@
+name: Content removal request
+description: You own a prompt, image or video shown on the site and want it removed.
+labels: [removal]
+body:
+  - type: markdown
+    attributes:
+      value: Include only public ownership evidence. A private contact address has not been configured yet.
+  - type: textarea
+    id: urls
+    attributes:
+      label: Page URLs on promptsbaba.com
+      description: One per line.
+    validations:
+      required: true
+  - type: textarea
+    id: ownership
+    attributes:
+      label: How are you connected to this content?
+      description: For example, a link to your original post or your profile on the source collection.
+    validations:
+      required: true

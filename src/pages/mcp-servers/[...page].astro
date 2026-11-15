@@ -1,0 +1,6 @@
+---
+import Directory from '../../views/McpDirectory.astro';
+import { mcpServers, MCP_PAGE_SIZE } from '../../lib/mcp';
+export const getStaticPaths = ({ paginate }) => paginate(mcpServers,{pageSize:MCP_PAGE_SIZE});
+---
+<Directory page={Astro.props.page} />

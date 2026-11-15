@@ -1,0 +1,10 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "com.promptsbaba/promptsbaba",
+  "title": "promptsbaba",
+  "description": "Search 7,000+ free AI image, video and text prompts and fill them in for your task.",
+  "version": "1.0.0",
+  "websiteUrl": "https://promptsbaba.com/mcp",
+  "repository": { "url": "https://github.com/heysamai/promptsbaba", "source": "github", "subfolder": "api" },
+  "remotes": [{ "type": "streamable-http", "url": "https://promptsbaba.com/api/mcp" }]
+}

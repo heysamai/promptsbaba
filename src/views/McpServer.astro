@@ -1,0 +1,32 @@
+---
+import Base from '../layouts/Base.astro';
+import McpCard from '../components/McpCard.astro';
+import {mcpServers,sourceFor,mcpCategoryNames,integrationNames,authenticationNames,type McpServer} from '../lib/mcp';
+import {SITE} from '../lib/seo';
+interface Props{server:McpServer;}
+const{server:s}=Astro.props;
+const source=sourceFor(s),remote=s.deployment==='remote';
+const related=mcpServers.filter(p=>p.slug!==s.slug&&p.categories.some(c=>s.categories.includes(c))).slice(0,3);
+const schema={'@context':'https://schema.org','@type':'CreativeWork',name:s.name,description:s.description,url:`${SITE}/mcp-servers/${s.slug}`,isBasedOn:`${source.snapshotUrl}#L${s.sourceLine}`,about:s.categories.map(c=>mcpCategoryNames[c])};
+const docsUrl=remote?s.websiteUrl:s.repositoryUrl;
+---
+<Base lang="en" title={`${s.name} · MCP server`} description={s.description.slice(0,155)} crumbs={[["MCP servers","/mcp-servers"],[s.name,`/mcp-servers/${s.slug}`]]} schema={[schema]}>
+  <div class="wrap directory-wrap">
+    <a class="link text-sm text-muted" href="/mcp-servers">All MCP servers</a>
+    <div class="mcp-detail-grid mt-7">
+      <article>
+        <div class="flex items-center gap-4"><span class="mcp-monogram mcp-monogram-large" aria-hidden="true">{s.owner.slice(0,2).toUpperCase()}</span><p class="text-sm text-muted">{remote?'Website':'Repository owner'}: <a href={remote?s.websiteUrl:`https://github.com/${s.owner}`} class="link" target="_blank" rel="noopener noreferrer">{s.owner}</a></p></div>
+        <h1 class="display mt-6 break-words text-3xl sm:text-5xl">{s.name}</h1><p class="mt-6 text-lg leading-relaxed text-muted">{s.description}</p>
+        <div class="mt-7 flex flex-wrap gap-2"><span class="chip">{remote?'Remote endpoint':'Self-hosted project'}</span>{s.categories.map(c=><a class="chip" href={`/mcp-servers/category/${c}`}>{mcpCategoryNames[c]}</a>)}</div>
+        {remote&&<section class="remote-connection mt-10"><h2>Remote endpoint</h2><p>Copy the source-listed URL into your MCP client and follow the provider’s authentication instructions.</p><div><code>{s.endpointUrl}</code><button type="button" id="copy-endpoint" data-url={s.endpointUrl}>Copy endpoint</button></div><span id="endpoint-copy-status" aria-live="polite"></span></section>}
+        <section class="mt-10"><h2 class="font-display text-2xl font-bold">What the source lists</h2><dl class="mcp-facts"><div><dt>Deployment</dt><dd>{remote?'Remote hosted endpoint':'Self-hosted project'}</dd></div>{remote?<div><dt>Authentication</dt><dd>{s.authentication?.map(a=>authenticationNames[a]).join(', ')||'Not specified by the source'}</dd></div>:<><div><dt>Code language</dt><dd>{s.languages.join(', ')||'Not listed'}</dd></div><div><dt>Integrates with</dt><dd>{s.integrations.map(i=>integrationNames[i]).join(', ')||'Not listed'}</dd></div><div><dt>Operating systems</dt><dd>{s.operatingSystems.join(', ')||'Not listed'}</dd></div></>}<div><dt>License & pricing</dt><dd>See the provider’s documentation</dd></div><div><dt>PromptsBaba testing</dt><dd>Not independently tested</dd></div></dl></section>
+      </article>
+      <aside class="mcp-setup"><h2>{remote?'Connect through your MCP client':'Start with the project’s instructions'}</h2><p>Check the requirements, authentication, and permissions in the provider’s documentation.</p><a href={docsUrl} class="btn" target="_blank" rel="noopener noreferrer">{remote?'Website & setup instructions ↗':'Installation & documentation ↗'}</a><p class="mcp-repository-url">{docsUrl}</p><hr/><h3>Listing source</h3><p>{source.name}<br/>{source.author}</p><a href={`${source.snapshotUrl}#L${s.sourceLine}`} target="_blank" rel="noopener noreferrer" class="link text-sm">View this entry in the source</a><p>Imported {source.importedAt.slice(0,10)} · <a href={source.localLicenseUrl} class="link">Collection: MIT</a></p><p>The collection license covers the listing, not the server or service.</p></aside>
+    </div>
+    <section class="pt-16"><div class="section-heading"><h2>Explore similar projects</h2><a class="link text-sm" href={`/mcp-servers/category/${s.categories[0]}`}>Browse this category</a></div><div class="mcp-grid mt-6">{related.map(server=><McpCard server={server}/>)}</div></section>
+  </div>
+</Base>
+<script>
+ const button=document.querySelector<HTMLButtonElement>('#copy-endpoint');
+ button?.addEventListener('click',async()=>{const status=document.querySelector('#endpoint-copy-status')!;try{await navigator.clipboard.writeText(button.dataset.url!);status.textContent='Endpoint copied';}catch{status.textContent='Could not copy. Select the endpoint URL and copy it manually.';}});
+</script>
