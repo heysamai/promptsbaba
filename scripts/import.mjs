@@ -5,12 +5,27 @@ import { readFile, writeFile, mkdir, readdir, access } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { contentHash, rawSource, githubRevision, githubJson } from './lib/source-provenance.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = path.join(ROOT, 'sources');
 const OUT = path.join(ROOT, 'src', 'data');
 const RAW = 'https://raw.githubusercontent.com';
 const FETCH = process.argv.includes('--fetch');
+const provenancePath = path.join(SRC, 'import-provenance.json');
+let provenance;
+try { provenance = JSON.parse(await readFile(provenancePath, 'utf8')); }
+catch (error) { if (error.code !== 'ENOENT') throw error; }
+provenance ||= { files: {}, repositories: {}, community: [] };
+const checkedAt = new Date().toISOString();
+function trackClone(directory, repository, refreshed) {
+  const revision = execFileSync('git', ['-C', directory, 'rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
+  const previous = provenance.repositories[repository];
+  provenance.repositories[repository] = {
+    repository: `https://github.com/${repository}`, revision,
+    checkedAt: refreshed ? checkedAt : previous?.revision === revision ? previous.checkedAt : null,
+  };
+}
 
 const FILES = {
   'promptschat.csv': `${RAW}/f/prompts.chat/main/prompts.csv`,
@@ -347,18 +362,29 @@ async function fetchSources() {
   await mkdir(SRC, { recursive: true });
   for (const [file, url] of Object.entries(FILES)) {
     const dest = path.join(SRC, file);
-    if (!FETCH && (await exists(dest))) continue;
-    const res = await fetch(url);
+    if (!FETCH && (await exists(dest))) {
+      const recorded = provenance.files[file];
+      if (!recorded || recorded.sha256 !== contentHash(await readFile(dest))) throw new Error(`Untracked or changed source cache: ${file}; run with --fetch.`);
+      continue;
+    }
+    const source = rawSource(url);
+    const revision = await githubRevision(source.repository, source.ref);
+    const pinnedUrl = `${RAW}/${source.repository}/${revision}/${source.path}`;
+    const res = await fetch(pinnedUrl, { signal: AbortSignal.timeout(45000) });
     if (!res.ok) throw new Error(`${url}: HTTP ${res.status}`);
-    await writeFile(dest, Buffer.from(await res.arrayBuffer()));
+    const content = Buffer.from(await res.arrayBuffer());
+    await writeFile(dest, content);
+    provenance.files[file] = { repository: `https://github.com/${source.repository}`, path: source.path, revision, sha256: contentHash(content), checkedAt };
     console.log('downloaded', file);
   }
   const skills = path.join(SRC, 'anthropics-skills');
+  const refreshSkills = FETCH || !(await exists(skills));
   if (!(await exists(skills))) {
     execFileSync('git', ['clone', '--depth', '1', '-q', 'https://github.com/anthropics/skills.git', skills]);
   } else if (FETCH) {
-    execFileSync('git', ['-C', skills, 'pull', '-q', '--depth', '1']);
+    execFileSync('git', ['-C', skills, 'pull', '-q', '--ff-only', '--depth', '1']);
   }
+  trackClone(skills, 'anthropics/skills', refreshSkills);
 }
 
 const slugify = (s) =>
@@ -721,18 +747,12 @@ async function importCommunity() {
   const cache = path.join(SRC, 'community-skills.json');
   if (FETCH || !(await exists(cache))) {
     const rows = [];
+    provenance.community = [];
     for (const [topic, repos] of Object.entries(COMMUNITY)) {
       for (const repo of repos) {
-        // Without a token GitHub allows 60 calls an hour; set GITHUB_TOKEN to lift that.
-        const auth = process.env.GITHUB_TOKEN ? { Authorization: `Bearer ${process.env.GITHUB_TOKEN}` } : {};
-        const res = await fetch(`https://api.github.com/repos/${repo}`, { headers: { Accept: 'application/vnd.github+json', 'User-Agent': 'prompt-gallery-import', ...auth } });
-        // A rate limit would leave most repositories out, so stop rather than write a partial list.
-        if (res.status === 403 || res.status === 429) throw new Error(`GitHub rate limit at ${repo}; set GITHUB_TOKEN and run again`);
-        if (!res.ok) {
-          console.warn('skipped', repo, res.status);
-          continue;
-        }
-        const r = await res.json();
+        const r = await githubJson(`repos/${repo}`);
+        const revision = await githubRevision(repo, r.default_branch);
+        provenance.community.push({ repository: r.html_url, revision, checkedAt, reportedLicense: r.license?.spdx_id || null, appliedLicense: LICENSE_FIX[repo] || r.license?.spdx_id || null });
         rows.push({
           name: r.name,
           by: r.owner.login,
@@ -826,7 +846,8 @@ async function fetchTextRepos() {
   for (const [dir, [repo, sparse]] of Object.entries(TEXT_REPOS)) {
     const dest = path.join(SRC, dir);
     if (await exists(dest)) {
-      if (FETCH) execFileSync('git', ['-C', dest, 'pull', '-q', '--depth', '1']);
+      if (FETCH) execFileSync('git', ['-C', dest, 'pull', '-q', '--ff-only', '--depth', '1']);
+      trackClone(dest, repo, FETCH);
       continue;
     }
     const url = `https://github.com/${repo}.git`;
@@ -836,6 +857,7 @@ async function fetchTextRepos() {
     } else {
       execFileSync('git', ['clone', '--depth', '1', '-q', url, dest]);
     }
+    trackClone(dest, repo, true);
     console.log('cloned', repo);
   }
 }
@@ -1173,6 +1195,10 @@ videos = finalize(videos, (x) => `${slugify(x.title) || 'video'}-${x.id.slice(-6
 
 const skills = await importSkills();
 const community = await importCommunity();
+
+// Persist provenance only after every source and parser has succeeded.
+await writeFile(provenancePath, JSON.stringify(provenance, null, 2) + '\n');
+await writeFile(path.join(OUT, 'source-sync.json'), JSON.stringify({ schemaVersion: 1, generatedAt: checkedAt, ...provenance }, null, 2) + '\n');
 
 await writeFile(path.join(OUT, 'image-prompts.json'), JSON.stringify(images));
 await writeFile(path.join(OUT, 'text-prompts.json'), JSON.stringify(texts));

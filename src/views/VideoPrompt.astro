@@ -1,10 +1,11 @@
 ---
 import Base from '../layouts/Base.astro';
+import PromptExamples from '../components/PromptExamples.astro';
 import VideoCard from '../components/VideoCard.astro';
 import PromptBox from '../components/PromptBox.astro';
-import { sources, excerpt, metaDescOf, fmt, type VideoPrompt } from '../lib/data';
+import { sources, videoPromptGroups, excerpt, metaDescOf, fmt, type VideoPrompt } from '../lib/data';
 import { ui, href, type Lang } from '../i18n';
-import { clip, videoPromptSchema } from '../lib/seo';
+import { videoPromptSchema } from '../lib/seo';
 
 interface Props {
   lang: Lang;
@@ -20,7 +21,7 @@ const src = sources[v.source];
 
 <Base
   lang={lang}
-  title={tv.detailMeta(clip(v.title, 52), v.model)}
+  title={tv.detailMeta(v.title, v.model)}
   description={metaDescOf(v)}
   image={v.poster || undefined}
   crumbs={[[tv.title, '/videos'], [v.title, `/video/${v.slug}`]]}
@@ -47,7 +48,7 @@ const src = sources[v.source];
               playsinline
               preload={v.poster ? 'none' : 'metadata'}
               poster={v.poster || undefined}
-              class="block w-full border border-ink/15 bg-ink"
+              class="block aspect-video w-full border border-ink/15 bg-ink object-contain"
               aria-label={v.title}
             >
               {/* Without a poster, load just enough to show the first frame. */}
@@ -68,6 +69,7 @@ const src = sources[v.source];
       <div class="space-y-6 lg:sticky lg:top-20 lg:self-start">
         {v.desc && <p class="text-lg leading-relaxed text-muted">{v.desc}</p>}
         <PromptBox prompt={v.prompt} lang={lang} id={`v:${v.slug}`} />
+        <PromptExamples entries={videoPromptGroups.get(v.slug)} currentSlug={v.slug} base="/video/" kind="video" />
 
         <div class="border-t border-ink pt-3 text-sm">
           <p class="label">{tp.credits}</p>

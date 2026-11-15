@@ -30,14 +30,14 @@ const bare = barePath(Astro.url.pathname).replace(/(.)\/+$/, '$1');
 const pageNo = bare.match(/\/(\d+)$/)?.[1];
 const description = (Astro.props.description ?? t.siteDesc) + (pageNo ? ` Page ${pageNo}.` : '');
 const abs = (l: Lang) => new URL(href(l, bare), Astro.site);
-const nav = [
-  ['/images', t.nav.images],
-  ['/videos', t.nav.videos],
-  ['/text', t.nav.text],
-  ['/skills', t.nav.skills],
-  ['/mcp-servers', 'MCP servers'],
-  ['/credits', t.nav.credits],
-  ['/mcp', 'Connect your agent'],
+const promptLinks = [
+  { path: '/images', label: 'Image prompts', description: 'Find a visual starting point', icon: 'M4 4h16v16H4z M4 16l5-5 4 4 3-3 4 4 M8 8h.01' },
+  { path: '/videos', label: 'Video prompts', description: 'Put your ideas in motion', icon: 'M3 5h13v14H3z M16 10l5-3v10l-5-3' },
+  { path: '/text', label: 'Text prompts', description: 'Get past the blank page', icon: 'M5 5h14 M12 5v14 M8 19h8' },
+];
+const libraryLinks = [
+  { path: '/skills', label: 'Agent skills' },
+  { path: '/mcp-servers', label: 'MCP servers' },
 ];
 const graphs: Record<string, unknown>[] = [...schema];
 if (bare === '/') {
@@ -63,6 +63,9 @@ if (bare === '/') {
       name: site.name,
       url: SITE,
       logo: `${SITE}/icon-512.png`,
+      email: site.contactEmail,
+      contactPoint: { '@type': 'ContactPoint', contactType: 'Site maintenance', email: site.contactEmail },
+      member: { '@type': 'Person', name: site.maintainer },
       description: ui.en.siteDesc,
       sameAs: [REPO],
     },
@@ -84,7 +87,7 @@ const ld = graphs.map((g) => JSON.stringify(g).replace(/</g, '\\u003c'));
 const isOn = (p: string) =>
   (p === '/mcp' ? bare === p : bare.startsWith(p)) ||
   (p === '/images' && /^\/(category|prompt)\//.test(bare)) ||
-  (p === '/videos' && bare.startsWith('/video/')) ||
+  (p === '/videos' && /^\/video(?:\/|-model\/)/.test(bare)) ||
   (p === '/text' && bare.startsWith('/text-prompt'));
 ---
 
@@ -129,31 +132,59 @@ const isOn = (p: string) =>
   <body class="flex min-h-screen flex-col">
     <a href="#main" class="skip-link">Skip to content</a>
     <header class="site-header">
-      <div class="wrap flex min-h-20 flex-wrap items-center gap-x-8 gap-y-3 py-4">
-        <a href="/" aria-label="PromptsBaba home"><Logo /></a>
-        <nav class="desktop-nav hidden items-center gap-6 xl:flex" aria-label="Main">
-          <details class="prompt-menu">
-            <summary class:list={['nav-link', /^\/(images|videos|text|prompt|video|category)/.test(bare) && 'nav-active']}>Prompts <span aria-hidden="true">⌄</span></summary>
+      <div class="wrap header-inner">
+        <a class="header-brand" href="/" aria-label="PromptsBaba home"><Logo /></a>
+        <nav class="desktop-nav" aria-label="Main">
+          <details class="prompt-menu header-disclosure">
+            <summary class:list={['nav-link', promptLinks.some(({ path }) => isOn(path)) && 'nav-active']}>
+              Prompts
+              <svg class="nav-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
+            </summary>
             <div class="prompt-menu-items">
-              <a href="/images">Image prompts</a><a href="/videos">Video prompts</a><a href="/text">Text prompts</a>
+              {promptLinks.map(({ path, label, description, icon }) => (
+                <a href={path} aria-current={isOn(path) ? (bare === path ? 'page' : 'true') : undefined}>
+                  <span class="prompt-menu-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={icon} /></svg></span>
+                  <span><strong>{label}</strong><small>{description}</small></span>
+                </a>
+              ))}
             </div>
           </details>
-          <a class:list={['nav-link', isOn('/mcp-servers') && 'nav-active']} href="/mcp-servers">MCP servers</a>
-          <a class:list={['nav-link', isOn('/skills') && 'nav-active']} href="/skills">Agent skills</a>
-          <a class:list={['nav-link', bare === '/mcp' && 'nav-active']} href="/mcp">Connect your agent</a>
-          <a class:list={['nav-link', isOn('/credits') && 'nav-active']} href="/credits">Credits</a>
+          {libraryLinks.map(({ path, label }) => <a class="nav-link" href={path} aria-current={isOn(path) ? (bare === path ? 'page' : 'true') : undefined}>{label}</a>)}
         </nav>
-        <div class="ml-auto flex items-center gap-2">
-          <a href="/search" class="search-shortcut" aria-label="Search the library">Search <kbd>⌘ K</kbd></a>
+        <div class="header-actions">
+          <a href="/search" class="search-shortcut" aria-label="Search the library" aria-current={bare === '/search' ? 'page' : undefined}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m16 16 4 4" /></svg>
+            <span>Search</span><kbd aria-hidden="true">⌘ K</kbd>
+          </a>
           <button type="button" id="theme-toggle" class="theme-button" aria-label="Switch to light theme" title="Switch to light theme">
-            <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M19 5l-1.5 1.5M6.5 17.5 5 19"/></svg>
-            <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M20 15A8 8 0 0 1 9 4a8 8 0 1 0 11 11Z"/></svg>
+            <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M19 5l-1.5 1.5M6.5 17.5 5 19"/></svg>
+            <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M20 15A8 8 0 0 1 9 4a8 8 0 1 0 11 11Z"/></svg>
           </button>
-          <a href={REPO} target="_blank" rel="noopener noreferrer" class="github-button hidden sm:inline-flex">GitHub ↗</a>
+          <a href="/mcp" class="header-connect" aria-current={bare === '/mcp' ? 'page' : undefined}>Connect agent</a>
+          <details class="mobile-menu header-disclosure">
+            <summary class="mobile-menu-toggle" aria-label="Navigation menu">
+              <svg class="menu-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
+              <svg class="close-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M6 18 18 6" /></svg>
+            </summary>
+            <nav class="mobile-menu-panel" aria-label="Main">
+              <div class="mobile-prompt-links">
+                {promptLinks.map(({ path, label, icon }) => (
+                  <a href={path} aria-current={isOn(path) ? (bare === path ? 'page' : 'true') : undefined}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={icon} /></svg>{label}
+                  </a>
+                ))}
+              </div>
+              <div class="mobile-library-links">
+                {libraryLinks.map(({ path, label }) => <a href={path} aria-current={isOn(path) ? (bare === path ? 'page' : 'true') : undefined}>{label}</a>)}
+              </div>
+              <a href="/mcp" class="header-connect mobile-connect" aria-current={bare === '/mcp' ? 'page' : undefined}>Connect agent</a>
+              <div class="mobile-secondary-links">
+                <a href="/credits" aria-current={isOn('/credits') ? 'page' : undefined}>Credits &amp; sources</a>
+                <a href={REPO} target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+              </div>
+            </nav>
+          </details>
         </div>
-        <nav class="mobile-nav flex w-full gap-5 overflow-x-auto border-t border-line pt-3 xl:hidden" aria-label="Collections">
-          {nav.map(([p, label]) => <a href={p} aria-current={isOn(p) ? 'page' : undefined} class="nav-link whitespace-nowrap">{label}</a>)}
-        </nav>
       </div>
     </header>
     <main id="main" class="flex-1"><slot /></main>
@@ -175,18 +206,45 @@ const isOn = (p: string) =>
           button.setAttribute('aria-label', label); button.title = label;
           document.querySelector('meta[name="theme-color"]').content = dark ? '#0B0F17' : '#F8FAFC';
         };
+        const themeStyle = document.createElement('style');
+        themeStyle.textContent = '*, *::before, *::after { transition: none !important; }';
         button.addEventListener('click', () => {
+          document.head.append(themeStyle);
           root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark';
           try { localStorage.setItem('promptsbaba-theme', root.dataset.theme); } catch {}
           sync();
+          getComputedStyle(root).color;
+          requestAnimationFrame(() => requestAnimationFrame(() => themeStyle.remove()));
         });
         document.addEventListener('keydown', (event) => {
           if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') { event.preventDefault(); location.href = '/search'; }
         });
+        const menus = [...document.querySelectorAll('.header-disclosure')];
+        const closeMenu = (menu, restoreFocus = false) => {
+          menu.removeAttribute('open');
+          if (restoreFocus) menu.querySelector('summary').focus();
+        };
         document.addEventListener('click', (event) => {
-          document.querySelectorAll('.prompt-menu[open]').forEach((menu) => { if (!menu.contains(event.target)) menu.removeAttribute('open'); });
+          menus.forEach((menu) => {
+            if (!menu.contains(event.target)) closeMenu(menu);
+            else if (event.target.closest('a')) closeMenu(menu);
+          });
         });
-        document.addEventListener('keydown', (event) => { if (event.key === 'Escape') document.querySelectorAll('.prompt-menu[open]').forEach((menu) => { menu.removeAttribute('open'); menu.querySelector('summary').focus(); }); });
+        document.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape') menus.filter((menu) => menu.open).forEach((menu) => closeMenu(menu, true));
+        });
+        document.addEventListener('focusin', (event) => {
+          menus.forEach((menu) => { if (!menu.contains(event.target)) closeMenu(menu); });
+        });
+        matchMedia('(min-width: 1100px)').addEventListener('change', () => {
+          menus.forEach((menu) => {
+            const hadFocus = menu.contains(document.activeElement);
+            closeMenu(menu);
+            if (hadFocus) document.querySelector('.header-brand').focus();
+          });
+        });
+        const shortcut = document.querySelector('.search-shortcut kbd');
+        if (!/Mac|iPhone|iPad/.test(navigator.platform)) shortcut.textContent = 'Ctrl K';
         sync();
       })();
     </script>

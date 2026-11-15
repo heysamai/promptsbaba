@@ -10,15 +10,15 @@ const { p, lang, eager = false } = Astro.props;
 ---
 
 <a href={href(lang, `/prompt/${p.slug}`)} class="tile group block">
-  <span class="tile-img">
+  <span class="tile-img prompt-image-frame">
     <img
       src={p.images[0]}
       alt={p.title}
       loading={eager ? 'eager' : 'lazy'}
       decoding="async"
       referrerpolicy="no-referrer"
-      class="block min-h-20 w-full"
-      onerror="this.closest('a').style.display='none'"
+      class="prompt-example-image"
+      onerror="this.style.visibility='hidden'; this.parentElement.dataset.unavailable='true'"
     />
     {
       p.images.length > 1 && (

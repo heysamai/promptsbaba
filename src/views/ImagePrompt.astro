@@ -1,10 +1,11 @@
 ---
 import Base from '../layouts/Base.astro';
+import PromptExamples from '../components/PromptExamples.astro';
 import ImageCard from '../components/ImageCard.astro';
 import PromptBox from '../components/PromptBox.astro';
-import { sources, excerpt, metaDescOf, fmt, type ImagePrompt } from '../lib/data';
+import { sources, imagePromptGroups, excerpt, metaDescOf, fmt, type ImagePrompt } from '../lib/data';
 import { ui, href, categoryLabels, type Lang } from '../i18n';
-import { clip, imagePromptSchema } from '../lib/seo';
+import { imagePromptSchema } from '../lib/seo';
 
 interface Props {
   lang: Lang;
@@ -20,7 +21,7 @@ const src = sources[p.source];
 
 <Base
   lang={lang}
-  title={tp.metaTitle(clip(p.title, 52), p.model)}
+  title={tp.metaTitle(p.title, p.model)}
   description={metaDescOf(p)}
   image={p.images[0]}
   crumbs={[[t.images.title, '/images'], [cat[p.cats[0]], `/category/${p.cats[0]}`], [p.title, `/prompt/${p.slug}`]]}
@@ -48,14 +49,14 @@ const src = sources[p.source];
       <div class="space-y-4">
         {
           p.images.slice(0, 4).map((img, i) => (
-            <a href={img} target="_blank" rel="noopener noreferrer" class="block border border-ink/15 bg-line/50">
+            <a href={img} target="_blank" rel="noopener noreferrer" class="prompt-image-frame block border border-ink/15 bg-line/50" aria-label={`Open ${p.title}, ${tp.example(i + 1)}`}>
               <img
                 src={img}
                 alt={`${p.title}, ${tp.example(i + 1)}`}
                 loading={i ? 'lazy' : 'eager'}
                 referrerpolicy="no-referrer"
-                class="block w-full"
-                onerror="this.closest('a').style.display='none'"
+                class="prompt-example-image"
+                onerror="this.style.visibility='hidden'; this.parentElement.dataset.unavailable='true'"
               />
             </a>
           ))
@@ -65,6 +66,7 @@ const src = sources[p.source];
       <div class="space-y-6 lg:sticky lg:top-20 lg:self-start">
         {p.desc && <p class="text-lg leading-relaxed text-muted">{p.desc}</p>}
         <PromptBox prompt={p.prompt} lang={lang} id={`i:${p.slug}`} />
+        <PromptExamples entries={imagePromptGroups.get(p.slug)} currentSlug={p.slug} base="/prompt/" kind="image" />
 
         <div class="border-t border-ink pt-3 text-sm">
           <p class="label">{tp.credits}</p>

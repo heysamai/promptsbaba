@@ -1,3 +1,4 @@
+import { promptTitle, promptGroups, describePrompt } from './prompt-presentation.mjs';
 import imageData from '../data/image-prompts.json';
 import textData from '../data/text-prompts.json';
 import videoData from '../data/video-prompts.json';
@@ -77,10 +78,13 @@ export interface Source {
 
 export const images = imageData as ImagePrompt[];
 export const texts = textData as TextPrompt[];
-export const videos = videoData as VideoPrompt[];
+export const videos = (videoData as VideoPrompt[]).map(video => ({ ...video, title: promptTitle(video) }));
 export const skills = skillData as Skill[];
 export const communitySkills = communityData as CommunitySkill[];
 export const sources = meta.sources as Record<string, Source>;
+export const imagePromptGroups = promptGroups(images);
+export const videoPromptGroups = promptGroups(videos);
+export const textPromptGroups = promptGroups(texts);
 
 export const catCounts: Record<string, number> = {};
 for (const p of images) for (const c of p.cats) catCounts[c] = (catCounts[c] || 0) + 1;
@@ -142,15 +146,11 @@ export const excerpt = (s: string, n = 140) => {
 };
 
 /**
- * Meta description for a prompt page: the source's own summary when it has one, otherwise the
- * title followed by the start of the prompt, so near-identical prompts still read differently.
+ * Prefix the source summary (or prompt excerpt) with its full display title so distinct
+ * examples remain identifiable even when their source descriptions repeat.
  */
-export const metaDescOf = (x: { title: string; desc?: string; prompt: string }, n = 155) => {
-  if (x.desc) return excerpt(x.desc, n);
-  const body = excerpt(x.prompt, n);
-  if (body.toLowerCase().startsWith(x.title.toLowerCase().slice(0, 24))) return body;
-  return `${x.title}: ${excerpt(x.prompt, Math.max(60, n - x.title.length - 2))}`;
-};
+export const metaDescOf = (x: { slug?: string; title: string; desc?: string; prompt: string }, n = 155) =>
+  describePrompt({ ...x, desc: x.desc ? excerpt(x.desc, 300) : '', prompt: excerpt(x.prompt, 300) }, n);
 
 export const fmt = (n: number) => n.toLocaleString('en-US');
 export const pad = (n: number, w = 2) => String(n).padStart(w, '0');

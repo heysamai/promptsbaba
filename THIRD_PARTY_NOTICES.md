@@ -14,7 +14,7 @@ assets are not included in this release.
 ## Prompt collections and skill listings
 
 The source-code license does not relicense the imported catalogs. See the
-[README source table](README.md#content-sources), `src/data/meta.json`,
+[source collection table](docs/DEVELOPMENT.md#content-sources), `src/data/meta.json`,
 individual source records, and the site's Credits page for collection
 authors and licenses. Prompt text is imported; titles and categories may be
 normalized. Linked skill repositories and sample media retain their own terms.

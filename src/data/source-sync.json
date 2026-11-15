@@ -1,0 +1,528 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-11-15T19:54:30.075Z",
+  "files": {
+    "promptschat.csv": {
+      "repository": "https://github.com/f/prompts.chat",
+      "path": "prompts.csv",
+      "revision": "a8643cb22023cce91935ed718cf5f62c37145f98",
+      "sha256": "b8128aabc1def3dd64c4a808df205085b17652d8e0b5db431361b370ec5f9da0",
+      "checkedAt": "2026-11-15T19:51:38.822Z"
+    },
+    "jau123.json": {
+      "repository": "https://github.com/jau123/nanobanana-trending-prompts",
+      "path": "prompts/prompts.json",
+      "revision": "eb4e5889ac3272fe9d9ca49db90cec60e2a24a38",
+      "sha256": "042f29e7498c672b1e9a27a26b2dcd197ac17dd92a16cf5b003012be85038ffd",
+      "checkedAt": "2026-11-15T19:51:38.822Z"
+    },
+    "youmind.md": {
+      "repository": "https://github.com/YouMind-OpenLab/awesome-nano-banana-pro-prompts",
+      "path": "README.md",
+      "revision": "bf0ef98a9cb0b26c4234f9e03a1e9be316cd696c",
+      "sha256": "91f7cb4cf9db1777f578651a36126226b9dc3ddf3c7db68ec918a6dfe005c975",
+      "checkedAt": "2026-11-15T19:51:38.822Z"
+    },
+    "zerolu.md": {
+      "repository": "https://github.com/ZeroLu/awesome-nanobanana-pro",
+      "path": "README.md",
+      "revision": "ab71e7b5eb89a34c65a76e846b95afec88dc2280",
+      "sha256": "142648d95fc8eac05483012cfbc38ec651d31ed7ea3b181f302a942c07791d32",
+      "checkedAt": "2026-11-15T19:51:38.822Z"
+    },
+    "freestylefly.json": {
+      "repository": "https://github.com/freestylefly/awesome-gpt-image-2",
+      "path": "data/cases.json",
+      "revision": "0ebea1f83ccdc6b06def3ce3ee51ad42ec53daf3",
+      "sha256": "a9ef652dffdac0802c656e4770f9793315292fa78e955d3e8c6e0e6346eb7da8",
+      "checkedAt": "2026-11-15T19:51:38.822Z"
+    },
+    "evolink.md": {
+      "repository": "https://github.com/Evolink-AI/awesome-gpt-image-2-API-Prompts",
+      "path": "README.md",
+      "revision": "e2a269ad1a055a0b4f6c1e170341c6c1aba30faa",
+      "sha256": "9538387ea77eb41311bf26e44bc2b5e21ef6b3b7173551a370b6f6df64040e3c",
+      "checkedAt": "2026-11-15T19:51:38.822Z"
+    },
+    "learnprompt-seedance.json": {
+      "repository": "https://github.com/LearnPrompt/awesome-seedance",
+      "path": "data/cases.json",
+      "revision": "7b5fe305d2c177922fd2f200bcb157d10248aa7d",
+      "sha256": "03f2d3d33b5e4e2422ec0fb57e88fb4475e87e28d1378f26dde9757ad4b8dd40",
+      "checkedAt": "2026-11-15T19:51:38.822Z"
+    },
+    "youmind-seedance.md": {
+      "repository": "https://github.com/YouMind-OpenLab/awesome-seedance-2-prompts",
+      "path": "README.md",
+      "revision": "43341dbdcf14826fc71b2031999eb5f1587cea18",
+      "sha256": "73f14488bdc8375f6cc296f7e71c90d223513923636ef4a2d684316ce307a7fa",
+      "checkedAt": "2026-11-15T19:51:38.822Z"
+    },
+    "youmind-seedance-videos.json": {
+      "repository": "https://github.com/YouMind-OpenLab/awesome-seedance-2-prompts",
+      "path": "video-urls.json",
+      "revision": "43341dbdcf14826fc71b2031999eb5f1587cea18",
+      "sha256": "20ee5cd4f773c169e1a303546eea03fdf19e39879628562ed2e44b22ef42cab1",
+      "checkedAt": "2026-11-15T19:51:38.822Z"
+    },
+    "osw-seedance.json": {
+      "repository": "https://github.com/opensource-works/awesome-seedance-prompts",
+      "path": "data/posts.json",
+      "revision": "72db930287811875ffe9551d80de982a133f919e",
+      "sha256": "68751ecce42976a344d0d83d05039d65415ac11837bc9e675902ab994afb1253",
+      "checkedAt": "2026-11-15T19:51:38.822Z"
+    },
+    "osw-mirror.json": {
+      "repository": "https://github.com/opensource-works/awesome-seedance-prompts",
+      "path": "data/mirror.json",
+      "revision": "72db930287811875ffe9551d80de982a133f919e",
+      "sha256": "f1afcefade96fce2664c21fd1cba7ae638ac52b803d48d28b9b3bcbc6fbf7e36",
+      "checkedAt": "2026-11-15T19:51:38.822Z"
+    },
+    "youmind-gemini3.md": {
+      "repository": "https://github.com/YouMind-OpenLab/awesome-gemini-3-prompts",
+      "path": "README.md",
+      "revision": "2ef62fe7c044888a22825599a4e11cf0c4f55a99",
+      "sha256": "ccc4d9e0a6382907e5cf76d543d90181058882216ab3e4622d8b2de58ec9bb09",
+      "checkedAt": "2026-11-15T19:51:38.822Z"
+    },
+    "youmind-gptimage2.md": {
+      "repository": "https://github.com/YouMind-OpenLab/awesome-gpt-image-2",
+      "path": "README.md",
+      "revision": "5f5ad8ecfea46beccfc98fa122243285a2847bf7",
+      "sha256": "88fc533d53e1299ad2b917576a1fef4adc401f4d01051729421bef94cd5c8f0d",
+      "checkedAt": "2026-11-15T19:51:38.822Z"
+    },
+    "youmind-gptimage15.md": {
+      "repository": "https://github.com/YouMind-OpenLab/awesome-gpt-image-1.5",
+      "path": "README.md",
+      "revision": "d0c1b5edadeab4d98b485ca4d3fe7c1391521732",
+      "sha256": "f9a34d95ba4795a417be3673a5c163c9069c72cab655dd4e4ead91f71274f225",
+      "checkedAt": "2026-11-15T19:51:38.822Z"
+    },
+    "youmind-seedream.md": {
+      "repository": "https://github.com/YouMind-OpenLab/awesome-seedream-4.5",
+      "path": "README.md",
+      "revision": "1e00b29e2225695e50f21224447de1cbe08b8a95",
+      "sha256": "f49db52e0e1ce34ac8ceeee0d95ca1cfad41415898f15fe943c4496e32fdf098",
+      "checkedAt": "2026-11-15T19:51:38.822Z"
+    },
+    "devanshug.md": {
+      "repository": "https://github.com/devanshug2307/Awesome-AI-Image-Prompts",
+      "path": "README.md",
+      "revision": "8f34520e2f8840ae56cb9c1e2bcde874ec79de89",
+      "sha256": "57e83165abbe5277ca424dfc51c58406c5df21d0d6a973f5a937dc2b0e8bfb59",
+      "checkedAt": "2026-11-15T19:51:38.822Z"
+    },
+    "evolink-h3.md": {
+      "repository": "https://github.com/Evolink-AI/awesome-minimax-H3-prompts",
+      "path": "README.md",
+      "revision": "fb0e1570653a3291503ed283da6a05b981f94f2f",
+      "sha256": "7e758a471329b54bd9e3275d840f2c846040c8e8cb2a99536e94cc5a5b309645",
+      "checkedAt": "2026-11-15T19:51:38.822Z"
+    },
+    "atlas-omni.json": {
+      "repository": "https://github.com/AtlasCloudAI/awesome-gemini-omni-prompts",
+      "path": "data/prompts_by_locale/en-US.json",
+      "revision": "795c4229044ef48043e1f5e8662c0ef344e1e2fd",
+      "sha256": "b8ac854a8172db5b2581e44106ff7e42e88cf5e7c166578e5a1723eb37c1d856",
+      "checkedAt": "2026-11-15T19:51:38.822Z"
+    },
+    "youmind-grok.md": {
+      "repository": "https://github.com/YouMind-OpenLab/awesome-grok-imagine-prompts",
+      "path": "README.md",
+      "revision": "5ed05e4be56742551b90a606833fefca18fc746a",
+      "sha256": "e80518dc7d208b294c32a2f7b75ed3cefa481b1aec500ebba2eba1525b814af0",
+      "checkedAt": "2026-11-15T19:51:38.822Z"
+    },
+    "youmind-grok-videos.json": {
+      "repository": "https://github.com/YouMind-OpenLab/awesome-grok-imagine-prompts",
+      "path": "video-urls.json",
+      "revision": "5ed05e4be56742551b90a606833fefca18fc746a",
+      "sha256": "401b88a7a99331de8ad6347451a6d6a0b21f149355486d06bf7b56d22a0fa4fe",
+      "checkedAt": "2026-11-15T19:51:38.822Z"
+    }
+  },
+  "repositories": {
+    "anthropics/skills": {
+      "repository": "https://github.com/anthropics/skills",
+      "revision": "1780c5e5a552fd4d1c9d6a7b0cab26b0c2bef064",
+      "checkedAt": "2026-11-15T19:51:38.822Z"
+    },
+    "VoltAgent/awesome-claude-code-subagents": {
+      "repository": "https://github.com/VoltAgent/awesome-claude-code-subagents",
+      "revision": "ed74d115b7fb7026a22a4f816a8e3250f425e3b4",
+      "checkedAt": "2026-11-15T19:51:38.822Z"
+    },
+    "wshobson/agents": {
+      "repository": "https://github.com/wshobson/agents",
+      "revision": "9c61ab243def98f72da12abd41cfcf5bcd91af9d",
+      "checkedAt": "2026-11-15T19:51:38.822Z"
+    },
+    "JosephHampton/awesome-gemini-cli-subagents": {
+      "repository": "https://github.com/JosephHampton/awesome-gemini-cli-subagents",
+      "revision": "3648268c381bd837764015d7c3cd74e7683ad078",
+      "checkedAt": "2026-11-15T19:51:38.822Z"
+    },
+    "mustvlad/ChatGPT-System-Prompts": {
+      "repository": "https://github.com/mustvlad/ChatGPT-System-Prompts",
+      "revision": "e19d82a2a77c5dc06ad17a92fcb28782ae61c753",
+      "checkedAt": "2026-11-15T19:51:38.822Z"
+    },
+    "abilzerian/LLM-Prompt-Library": {
+      "repository": "https://github.com/abilzerian/LLM-Prompt-Library",
+      "revision": "bd9557061458926308b33cd776f168942c30df3c",
+      "checkedAt": "2026-11-15T19:51:38.822Z"
+    },
+    "danielmiessler/Fabric": {
+      "repository": "https://github.com/danielmiessler/Fabric",
+      "revision": "1d54525113c36a74fb62e56f5c68036130ca7782",
+      "checkedAt": "2026-11-15T19:51:38.822Z"
+    }
+  },
+  "community": [
+    {
+      "repository": "https://github.com/greensock/gsap-skills",
+      "revision": "aed9cfd3277740755f6bfc1155c7aa645403b760",
+      "checkedAt": "2026-11-15T19:51:38.822Z",
+      "reportedLicense": "MIT",
+      "appliedLicense": "MIT"
+    },
+    {
+      "repository": "https://github.com/Vincentwei1021/video-shotcraft",
+      "revision": "253ae59081cd8f85cee47074eec9ad1121f2e5ad",
+      "checkedAt": "2026-11-15T19:51:38.822Z",
+      "reportedLicense": "Apache-2.0",
+      "appliedLicense": "Apache-2.0"
+    },
+    {
+      "repository": "https://github.com/oil-oil/oil-motion",
+      "revision": "07e31f2265f80caa8f2c1df825d85ac24a46307c",
+      "checkedAt": "2026-11-15T19:51:38.822Z",
+      "reportedLicense": "MIT",
+      "appliedLicense": "MIT"
+    },
+    {
+      "repository": "https://github.com/mromidev/claude-animated-shorts",
+      "revision": "e3b817b6afc6cd413466d43f11ba31209e034bbf",
+      "checkedAt": "2026-11-15T19:51:38.822Z",
+      "reportedLicense": "MIT",
+      "appliedLicense": "MIT"
+    },
+    {
+      "repository": "https://github.com/NiazMorshed2007/reanimate",
+      "revision": "3f7a55a2986a84ca2173e86ee9127eefe31d046d",
+      "checkedAt": "2026-11-15T19:51:38.822Z",
+      "reportedLicense": "MIT",
+      "appliedLicense": "MIT"
+    },
+    {
+      "repository": "https://github.com/echris6/motion-video-kit",
+      "revision": "e4b1c0004080fe6a0deb883631bad5eba1e5f339",
+      "checkedAt": "2026-11-15T19:51:38.822Z",
+      "reportedLicense": "MIT",
+      "appliedLicense": "MIT"
+    },
+    {
+      "repository": "https://github.com/haidrrrry/claude-remotion-skill",
+      "revision": "1dcbe5e3fc6cf970bd10d3cc05f0a8a5d19d0383",
+      "checkedAt": "2026-11-15T19:51:38.822Z",
+      "reportedLicense": "MIT",
+      "appliedLicense": "MIT"
+    },
+    {
+      "repository": "https://github.com/howseen-ai/claude-motion-design",
+      "revision": "3d90d349ef3fdde9b7e89de4df4a2159c9e8697f",
+      "checkedAt": "2026-11-15T19:51:38.822Z",
+      "reportedLicense": "MIT",
+      "appliedLicense": "MIT"
+    },
+    {
+      "repository": "https://github.com/rossark0/rossark-motion-skill",
+      "revision": "9b20964e32f07f8ac7e2948cd175746fa4a7712f",
+      "checkedAt": "2026-11-15T19:51:38.822Z",
+      "reportedLicense": "MIT",
+      "appliedLicense": "MIT"
+    },
+    {
+      "repository": "https://github.com/lovisdotio/motion2code",
+      "revision": "0f003288997604487df04c1b7a0586900d3e36bb",
+      "checkedAt": "2026-11-15T19:51:38.822Z",
+      "reportedLicense": "MIT",
+      "appliedLicense": "MIT"
+    },
+    {
+      "repository": "https://github.com/iart-ai/web-animation-skills",
+      "revision": "ed3a045192679b24d32090ee7a983871311ababd",
+      "checkedAt": "2026-11-15T19:51:38.822Z",
+      "reportedLicense": "MIT",
+      "appliedLicense": "MIT"
+    },
+    {
+      "repository": "https://github.com/EL4CTEO/blender-skills",
+      "revision": "b1b21dfb73bc40b874ebf2aa12645931bfed3523",
+      "checkedAt": "2026-11-15T19:51:38.822Z",
+      "reportedLicense": "MIT",
+      "appliedLicense": "MIT"
+    },
+    {
+      "repository": "https://github.com/dexhunter/seedance2-skill",
+      "revision": "516284d5bab58361bfdfed3cc96cee3e837d4c44",
+      "checkedAt": "2026-11-15T19:51:38.822Z",
+      "reportedLicense": "MIT",
+      "appliedLicense": "MIT"
+    },
+    {
+      "repository": "https://github.com/jnMetaCode/ai-shortfilm-prompts",
+      "revision": "34edc39108485c1b159f98ccae5c3e8dddb827ae",
+      "checkedAt": "2026-11-15T19:51:38.822Z",
+      "reportedLicense": "MIT",
+      "appliedLicense": "MIT"
+    },
+    {
+      "repository": "https://github.com/Rylaispirit/cinematic-video-prompt-skill",
+      "revision": "389c193cecafa6118989a2938b7cedc49be2456b",
+      "checkedAt": "2026-11-15T19:51:38.822Z",
+      "reportedLicense": "MIT",
+      "appliedLicense": "MIT"
+    },
+    {
+      "repository": "https://github.com/frankxai/awesome-motion-design-agent-skills",
+      "revision": "e7dc6e2e728c918ffcea5edb2d7c94e2a6f7785d",
+      "checkedAt": "2026-11-15T19:51:38.822Z",
+      "reportedLicense": "CC0-1.0",
+      "appliedLicense": "CC0-1.0"
+    },
+    {
+      "repository": "https://github.com/heygen-com/hyperframes",
+      "revision": "fe21bee3cf40007c23e7a3ad7dc7a2cf08f5df20",
+      "checkedAt": "2026-11-15T19:51:38.822Z",
+      "reportedLicense": "Apache-2.0",
+      "appliedLicense": "Apache-2.0"
+    },
+    {
+      "repository": "https://github.com/digitalsamba/claude-code-video-toolkit",
+      "revision": "01e85f4bbf5b3edffc7f8138406f3acc1dc43c66",
+      "checkedAt": "2026-11-15T19:51:38.822Z",
+      "reportedLicense": "MIT",
+      "appliedLicense": "MIT"
+    },
+    {
+      "repository": "https://github.com/adithya-s-k/manim_skill",
+      "revision": "cef045011722d285692e3381d12d4d637da56e18",
+      "checkedAt": "2026-11-15T19:51:38.822Z",
+      "reportedLicense": "MIT",
+      "appliedLicense": "MIT"
+    },
+    {
+      "repository": "https://github.com/Dakkshin/after-effects-mcp",
+      "revision": "88d5fbf08b7ae9f015ee98e5f8c4904095cf8202",
+      "checkedAt": "2026-11-15T19:51:38.822Z",
+      "reportedLicense": "MIT",
+      "appliedLicense": "MIT"
+    },
+    {
+      "repository": "https://github.com/Yusuke710/manim-skill",
+      "revision": "a0048d9e265499038f34a9aa58ff16d306b5034c",
+      "checkedAt": "2026-11-15T19:51:38.822Z",
+      "reportedLicense": "MIT",
+      "appliedLicense": "MIT"
+    },
+    {
+      "repository": "https://github.com/audrey-560/hyperframes-cinematic-caption",
+      "revision": "6cdb01d74949cab379e048e9092709adbb3b203b",
+      "checkedAt": "2026-11-15T19:51:38.822Z",
+      "reportedLicense": "MIT",
+      "appliedLicense": "MIT"
+    },
+    {
+      "repository": "https://github.com/ahujasid/mcp-for-blender",
+      "revision": "b6a2ce30c14636a562b5549684d9db6fc01f29ab",
+      "checkedAt": "2026-11-15T19:51:38.822Z",
+      "reportedLicense": "MIT",
+      "appliedLicense": "MIT"
+    },
+    {
+      "repository": "https://github.com/samuelgursky/davinci-resolve-mcp",
+      "revision": "f74eac02d4d8c2798595e62e019862f9e3aa8ff2",
+      "checkedAt": "2026-11-15T19:51:38.822Z",
+      "reportedLicense": "MIT",
+      "appliedLicense": "MIT"
+    },
+    {
+      "repository": "https://github.com/hetpatel-11/Adobe_Premiere_Pro_MCP",
+      "revision": "b866e6486749d25b3b4922002d2b49ffbbf6a43a",
+      "checkedAt": "2026-11-15T19:51:38.822Z",
+      "reportedLicense": "MIT",
+      "appliedLicense": "MIT"
+    },
+    {
+      "repository": "https://github.com/leancoderkavy/premiere-pro-mcp",
+      "revision": "dd0ed28c1fbcf7590f871a90c6525f249b95958d",
+      "checkedAt": "2026-11-15T19:51:38.822Z",
+      "reportedLicense": "MIT",
+      "appliedLicense": "MIT"
+    },
+    {
+      "repository": "https://github.com/SamurAIGPT/AI-Faceless-Video-Generator",
+      "revision": "f93898137b56fa06bc9a99fe03f41e04a7f5d8fd",
+      "checkedAt": "2026-11-15T19:51:38.822Z",
+      "reportedLicense": "MIT",
+      "appliedLicense": "MIT"
+    },
+    {
+      "repository": "https://github.com/Moessif/code-video-showcase",
+      "revision": "decd75d0aaaf19f81a50b52d0d02e605178916e0",
+      "checkedAt": "2026-11-15T19:51:38.822Z",
+      "reportedLicense": "MIT",
+      "appliedLicense": "MIT"
+    },
+    {
+      "repository": "https://github.com/Evolink-AI/Awesome-Blender-Seedance-Workflow-Usecases",
+      "revision": "7a9d91a84097cd8410bf684d316c5156a5ee1f55",
+      "checkedAt": "2026-11-15T19:51:38.822Z",
+      "reportedLicense": "NOASSERTION",
+      "appliedLicense": "CC-BY-4.0"
+    },
+    {
+      "repository": "https://github.com/KyaniteLabs/kinocut",
+      "revision": "caa8b86bb26fcb92c5a2993fcfacd309c2c5b0cf",
+      "checkedAt": "2026-11-15T19:51:38.822Z",
+      "reportedLicense": "Apache-2.0",
+      "appliedLicense": "Apache-2.0"
+    },
+    {
+      "repository": "https://github.com/Square-Zero-Labs/video-prompting-skill",
+      "revision": "79ecf65e696733670850cc3fe15e0c844e47bdeb",
+      "checkedAt": "2026-11-15T19:51:38.822Z",
+      "reportedLicense": "Apache-2.0",
+      "appliedLicense": "Apache-2.0"
+    },
+    {
+      "repository": "https://github.com/Alisa0808/vibe-creating-skill",
+      "revision": "a599301980a66eb47ddac5c15e41081b74a2759d",
+      "checkedAt": "2026-11-15T19:51:38.822Z",
+      "reportedLicense": "NOASSERTION",
+      "appliedLicense": "MIT"
+    },
+    {
+      "repository": "https://github.com/video-creator/ffmpeg-mcp",
+      "revision": "c2a9ab70fc82cc0b27dd31280968217f63036265",
+      "checkedAt": "2026-11-15T19:51:38.822Z",
+      "reportedLicense": "MIT",
+      "appliedLicense": "MIT"
+    },
+    {
+      "repository": "https://github.com/Melvynx/video-agent-skills",
+      "revision": "f4542923f7f796a1fa0e544cbfc1109d5eec87d8",
+      "checkedAt": "2026-11-15T19:51:38.822Z",
+      "reportedLicense": "MIT",
+      "appliedLicense": "MIT"
+    },
+    {
+      "repository": "https://github.com/mrbuslov/capcut-ai-editor",
+      "revision": "ecc81d92d5bc581eb518cbd92ac3c46476de93c2",
+      "checkedAt": "2026-11-15T19:51:38.822Z",
+      "reportedLicense": "MIT",
+      "appliedLicense": "MIT"
+    },
+    {
+      "repository": "https://github.com/zhouwei713/fpv-immersive-video-prompting",
+      "revision": "8c6642abdaf3f1d5d9f9d5537365e771f6b0b161",
+      "checkedAt": "2026-11-15T19:51:38.822Z",
+      "reportedLicense": "MIT",
+      "appliedLicense": "MIT"
+    },
+    {
+      "repository": "https://github.com/anymotion-agent/anymotion",
+      "revision": "edbe38f9ea1775927d7718ef54afac4a602e8579",
+      "checkedAt": "2026-11-15T19:51:38.822Z",
+      "reportedLicense": "MIT",
+      "appliedLicense": "MIT"
+    },
+    {
+      "repository": "https://github.com/Nutlope/hallmark",
+      "revision": "04977e15f3dfd6ee4b74c887dac3eb52665d6c92",
+      "checkedAt": "2026-11-15T19:51:38.822Z",
+      "reportedLicense": "MIT",
+      "appliedLicense": "MIT"
+    },
+    {
+      "repository": "https://github.com/google-labs-code/stitch-skills",
+      "revision": "0337446dadde6f8c94210444e2aa9d546126480f",
+      "checkedAt": "2026-11-15T19:51:38.822Z",
+      "reportedLicense": "Apache-2.0",
+      "appliedLicense": "Apache-2.0"
+    },
+    {
+      "repository": "https://github.com/plugin87/ux-ui-agent-skills",
+      "revision": "f823acedc3ef4e9b2ba944a28fd86fe2abdde427",
+      "checkedAt": "2026-11-15T19:51:38.822Z",
+      "reportedLicense": "MIT",
+      "appliedLicense": "MIT"
+    },
+    {
+      "repository": "https://github.com/oil-oil/oil-ui",
+      "revision": "5cf5bcb93653a3e00afa30b70b167e3d984c4ed4",
+      "checkedAt": "2026-11-15T19:51:38.822Z",
+      "reportedLicense": "MIT",
+      "appliedLicense": "MIT"
+    },
+    {
+      "repository": "https://github.com/freshtechbro/claudedesignskills",
+      "revision": "1da73febff0c3e1dfefc07f8a5ef8f7d1dfdb6cd",
+      "checkedAt": "2026-11-15T19:51:38.822Z",
+      "reportedLicense": "MIT",
+      "appliedLicense": "MIT"
+    },
+    {
+      "repository": "https://github.com/rohitg00/awesome-claude-design",
+      "revision": "7f60ee56b9340f8c2671a08c2d8aab4037546a64",
+      "checkedAt": "2026-11-15T19:51:38.822Z",
+      "reportedLicense": "MIT",
+      "appliedLicense": "MIT"
+    },
+    {
+      "repository": "https://github.com/sickn33/agentic-awesome-skills",
+      "revision": "8f1eb06978b026c5434284202c22215792c3071c",
+      "checkedAt": "2026-11-15T19:51:38.822Z",
+      "reportedLicense": "MIT",
+      "appliedLicense": "MIT"
+    },
+    {
+      "repository": "https://github.com/github/awesome-copilot",
+      "revision": "8ecd5b17f02fe5fbebf35eccd1867265eded811f",
+      "checkedAt": "2026-11-15T19:51:38.822Z",
+      "reportedLicense": "MIT",
+      "appliedLicense": "MIT"
+    },
+    {
+      "repository": "https://github.com/VoltAgent/awesome-agent-skills",
+      "revision": "20c57162c790d59d35e47c1538dc534c5c59e60d",
+      "checkedAt": "2026-11-15T19:51:38.822Z",
+      "reportedLicense": "MIT",
+      "appliedLicense": "MIT"
+    },
+    {
+      "repository": "https://github.com/coreyhaines31/marketingskills",
+      "revision": "1f837447b20bb6f0e72d87b80ece1c221c362c7d",
+      "checkedAt": "2026-11-15T19:51:38.822Z",
+      "reportedLicense": "MIT",
+      "appliedLicense": "MIT"
+    },
+    {
+      "repository": "https://github.com/K-Dense-AI/scientific-agent-skills",
+      "revision": "2d2065fb4520fa3f3f2bcf61cff26ec8b7eba4b5",
+      "checkedAt": "2026-11-15T19:51:38.822Z",
+      "reportedLicense": "MIT",
+      "appliedLicense": "MIT"
+    },
+    {
+      "repository": "https://github.com/gamedev-skills/awesome-gamedev-agent-skills",
+      "revision": "c6ca6c41c839b68319ffc08430b99ab768debc32",
+      "checkedAt": "2026-11-15T19:51:38.822Z",
+      "reportedLicense": "Apache-2.0",
+      "appliedLicense": "Apache-2.0"
+    }
+  ]
+}

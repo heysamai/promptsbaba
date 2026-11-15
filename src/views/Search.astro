@@ -82,13 +82,13 @@ const cfg = {
     const imageCard = ([title, slug, cat, img]) => {
       const a = el('a', 'tile group block');
       a.href = cfg.imageBase + slug;
-      const frame = el('span', 'tile-img');
-      const im = el('img', 'block min-h-20 w-full');
+      const frame = el('span', 'tile-img prompt-image-frame');
+      const im = el('img', 'prompt-example-image');
       im.src = img;
       im.alt = title;
       im.loading = 'lazy';
       im.referrerPolicy = 'no-referrer';
-      im.onerror = () => (a.style.display = 'none');
+      im.onerror = () => { im.style.visibility = 'hidden'; frame.dataset.unavailable = 'true'; };
       frame.append(im);
       const cap = el('span', 'mt-2.5 block');
       cap.append(

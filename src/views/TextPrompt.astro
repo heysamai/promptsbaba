@@ -1,9 +1,10 @@
 ---
 import Base from '../layouts/Base.astro';
+import PromptExamples from '../components/PromptExamples.astro';
 import PromptBox from '../components/PromptBox.astro';
-import { sources, textModels, excerpt, metaDescOf, type TextPrompt } from '../lib/data';
+import { sources, textPromptGroups, textModels, excerpt, metaDescOf, type TextPrompt } from '../lib/data';
 import { ui, href, type Lang } from '../i18n';
-import { clip, textPromptSchema } from '../lib/seo';
+import { textPromptSchema } from '../lib/seo';
 
 interface Props {
   lang: Lang;
@@ -21,7 +22,7 @@ const typeLabel = tt.types[x.type] ?? x.type;
 
 <Base
   lang={lang}
-  title={tt.detailMeta(clip(x.title, 52))}
+  title={tt.detailMeta(x.title)}
   description={metaDescOf(x)}
   crumbs={[[tt.title, '/text'], [x.title, `/text-prompt/${x.slug}`]]}
   schema={[textPromptSchema(lang, x, src)]}
@@ -49,6 +50,7 @@ const typeLabel = tt.types[x.type] ?? x.type;
     {x.desc && <p class="mt-6 max-w-3xl text-lg leading-relaxed text-muted">{x.desc}</p>}
 
     <div class="mt-8"><PromptBox prompt={x.prompt} lang={lang} id={`t:${x.slug}`} /></div>
+    <PromptExamples entries={textPromptGroups.get(x.slug)} currentSlug={x.slug} base="/text-prompt/" kind="text" />
 
     <div class="mt-6 border-t border-ink pt-3 text-sm">
       <p class="label">{tp.credits}</p>

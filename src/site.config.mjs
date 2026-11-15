@@ -5,6 +5,7 @@ export const site = {
   url: 'https://promptsbaba.com',
   repository: 'https://github.com/heysamai/promptsbaba',
   repositorySlug: 'heysamai/promptsbaba',
-  contactEmail: '',
+  maintainer: 'Sam',
+  contactEmail: 'hustlersanta@gmail.com',
   tagline: 'Stop guessing. Ask the Baba.',
 };

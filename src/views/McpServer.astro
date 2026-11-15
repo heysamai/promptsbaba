@@ -9,8 +9,9 @@ const source=sourceFor(s),remote=s.deployment==='remote';
 const related=mcpServers.filter(p=>p.slug!==s.slug&&p.categories.some(c=>s.categories.includes(c))).slice(0,3);
 const schema={'@context':'https://schema.org','@type':'CreativeWork',name:s.name,description:s.description,url:`${SITE}/mcp-servers/${s.slug}`,isBasedOn:`${source.snapshotUrl}#L${s.sourceLine}`,about:s.categories.map(c=>mcpCategoryNames[c])};
 const docsUrl=remote?s.websiteUrl:s.repositoryUrl;
+const pageName=mcpServers.some(other=>other.slug!==s.slug&&other.name===s.name)?`${s.name} (${s.owner})`:s.name;
 ---
-<Base lang="en" title={`${s.name} · MCP server`} description={s.description.slice(0,155)} crumbs={[["MCP servers","/mcp-servers"],[s.name,`/mcp-servers/${s.slug}`]]} schema={[schema]}>
+<Base lang="en" title={`${pageName} · MCP server`} description={`${pageName}. ${s.description}`.slice(0,155)} crumbs={[["MCP servers","/mcp-servers"],[s.name,`/mcp-servers/${s.slug}`]]} schema={[schema]}>
   <div class="wrap directory-wrap">
     <a class="link text-sm text-muted" href="/mcp-servers">All MCP servers</a>
     <div class="mcp-detail-grid mt-7">
